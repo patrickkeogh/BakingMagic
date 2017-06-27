@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Baking Magic</string>
+
+    <string name="details_title_ingredients">Ingredients</string>
+</resources>
