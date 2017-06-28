@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.android.exoplayer2.DefaultLoadControl;
@@ -30,7 +31,7 @@ import com.programming.kantech.bakingmagic.app.utils.Constants;
  * Created by patri on 2017-06-24.
  */
 
-public class Fragment_Media_Video extends Fragment  implements View.OnClickListener {
+public class Fragment_Step extends Fragment  implements View.OnClickListener {
 
     private Step mStep;
 
@@ -40,7 +41,7 @@ public class Fragment_Media_Video extends Fragment  implements View.OnClickListe
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the fragment
      */
-    public Fragment_Media_Video() {
+    public Fragment_Step() {
     }
 
     @Nullable
@@ -53,21 +54,25 @@ public class Fragment_Media_Video extends Fragment  implements View.OnClickListe
         }
 
         // Inflate the Ingredients List Fragment
-        View rootView = inflater.inflate(R.layout.fragment_media_video, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_step_details, container, false);
 
         // Initialize the player view.
         mPlayerView = (SimpleExoPlayerView) rootView.findViewById(R.id.playerView);
-        mPlayerView.requestFocus();
+
+
+        //mPlayerView.setLayoutParams(new LinearLayout.LayoutParams(mPlayerView.getMeasuredWidth(), mPlayerView.getMeasuredWidth()));
+
+        //mPlayerView.requestFocus();
 
         TextView tv_title = (TextView) rootView.findViewById(R.id.tv_step_title);
-        TextView tv_description = (TextView) rootView.findViewById(R.id.tv_step_description);
+        //TextView tv_description = (TextView) rootView.findViewById(R.id.tv_step_description);
 
         Bundle args = getArguments();
         mStep = args.getParcelable(Constants.EXTRA_STEP);
 
         if (mStep != null) {
             tv_title.setText(mStep.getShortDescription());
-            tv_description.setText(mStep.getDescription());
+            //tv_description.setText(mStep.getDescription());
         }
 
 

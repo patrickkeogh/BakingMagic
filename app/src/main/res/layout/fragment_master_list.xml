@@ -11,6 +11,7 @@
         android:textColor="@color/colorPrimaryDark"
         android:background="@color/colorPrimaryLight"
         android:text="@string/details_title_ingredients"
+
         android:paddingBottom="8dp"
         android:paddingLeft="8dp"
         android:paddingStart="8dp"

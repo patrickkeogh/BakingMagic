@@ -8,6 +8,7 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,9 +30,9 @@ import java.util.List;
 public class Fragment_Ingredients extends Fragment implements  LoaderManager.LoaderCallbacks<Cursor>,
         Adapter_Details_Ingredients.OnClickHandler {
 
-    // Variables to store a list of Ingredients and the id of the recipe that this fragment displays
-    private List<Ingredient> mIngredients;
+    // Variables to store the id of the recipe that this fragment displays the ingredients for
     private int mRecipeId;
+    private String mRecipeName;
 
     private int mPosition = RecyclerView.NO_POSITION;
 
@@ -55,8 +56,11 @@ public class Fragment_Ingredients extends Fragment implements  LoaderManager.Loa
 
         // Load the saved state if there is one
         if(savedInstanceState != null) {
-            mIngredients = savedInstanceState.getParcelableArrayList(Constants.STATE_INFO_INGEDIENTS_LIST);
             mRecipeId = savedInstanceState.getInt(Constants.STATE_INFO_RECIPE_ID);
+        }else{
+            Log.i(Constants.LOG_TAG, "savedInstanceState is null, get data from intent");
+            Bundle args = getArguments();
+            mRecipeId = args.getInt(Constants.EXTRA_RECIPE_ID);
         }
 
         // Inflate the Ingredients List Fragment
@@ -90,21 +94,11 @@ public class Fragment_Ingredients extends Fragment implements  LoaderManager.Loa
         return rootView;
     }
 
-    // Setter methods for keeping track of the Ingredients List and Recipe Id
-    public void setIngredients(List<Ingredient> ingredients) {
-        mIngredients = ingredients;
-    }
-
-    public void setRecipeId(int id) {
-        mRecipeId = id;
-    }
-
     /**
      * Save the current state of this fragment
      */
     @Override
     public void onSaveInstanceState(Bundle currentState) {
-        currentState.putParcelableArrayList(Constants.STATE_INFO_INGEDIENTS_LIST, (ArrayList<Ingredient>) mIngredients);
         currentState.putInt(Constants.STATE_INFO_RECIPE_ID, mRecipeId);
     }
 
@@ -117,7 +111,7 @@ public class Fragment_Ingredients extends Fragment implements  LoaderManager.Loa
             case Constants.INGREDIENT_DETAIL_LOADER:
 
                 String selection = Contract_BakingMagic.IngredientEntry.COLUMN_RECIPE_ID + "=?";
-                String[] selectionArgs = {"1"};
+                String[] selectionArgs = {"" + mRecipeId};
 
 
                 /* URI for all rows of data in our gatherings table */

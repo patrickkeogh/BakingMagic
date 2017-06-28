@@ -69,13 +69,10 @@ public class Fragment_DetailsList extends Fragment implements LoaderManager.Load
 
         final View rootView = inflater.inflate(R.layout.fragment_master_list, container, false);
 
-//        Activity_Details activity = (Activity_Details) getActivity();
-//        mRecipe_Id = activity.getRecipeId();
-
         Bundle args = getArguments();
-        mRecipe_Id = args.getInt("edttext");
+        mRecipe_Id = args.getInt(Constants.EXTRA_RECIPE_ID);
 
-        Log.i(Constants.LOG_TAG, "Recipe id in onCreateView(): " + mRecipe_Id);
+        //Log.i(Constants.LOG_TAG, "Recipe id in onCreateView(): " + mRecipe_Id);
 
 
         // Get a reference to the textview4
@@ -85,10 +82,10 @@ public class Fragment_DetailsList extends Fragment implements LoaderManager.Load
             @Override
             public void onClick(View view) {
 
-                // TODO: Tell activity to load Fragment Ingredients
                 Utils_General.showToast(getActivity(), "We clicked the ingredients text");
 
-                ((Activity_Details) getActivity()).replaceFragments(true);
+                ((Activity_Details) getActivity()).replaceDetailsFragmentWithIngredientsFrag();
+
             }
         });
 
@@ -143,7 +140,7 @@ public class Fragment_DetailsList extends Fragment implements LoaderManager.Load
         switch (loaderId) {
             case Constants.STEPS_DETAIL_LOADER:
 
-                Log.i(Constants.LOG_TAG, "Recipe Id in OnCreateLoader:" + mRecipe_Id);
+                //Log.i(Constants.LOG_TAG, "Recipe Id in OnCreateLoader:" + mRecipe_Id);
 
                 String selection = Contract_BakingMagic.StepsEntry.COLUMN_RECIPE_ID + "=?";
                 String[] selectionArgs = {"" + mRecipe_Id};

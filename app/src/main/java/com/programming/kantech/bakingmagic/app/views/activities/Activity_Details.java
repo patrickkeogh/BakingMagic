@@ -1,12 +1,11 @@
 package com.programming.kantech.bakingmagic.app.views.activities;
 
+import android.content.Intent;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.LoginFilter;
 import android.util.Log;
-import android.view.View;
 import android.widget.FrameLayout;
 
 import com.programming.kantech.bakingmagic.app.R;
@@ -14,10 +13,9 @@ import com.programming.kantech.bakingmagic.app.data.model.pojo.Recipe;
 import com.programming.kantech.bakingmagic.app.data.model.pojo.Step;
 import com.programming.kantech.bakingmagic.app.utils.Constants;
 import com.programming.kantech.bakingmagic.app.utils.Utils_General;
-import com.programming.kantech.bakingmagic.app.views.fragments.Fragment_Details;
 import com.programming.kantech.bakingmagic.app.views.fragments.Fragment_DetailsList;
 import com.programming.kantech.bakingmagic.app.views.fragments.Fragment_Ingredients;
-import com.programming.kantech.bakingmagic.app.views.fragments.Fragment_Media_Video;
+import com.programming.kantech.bakingmagic.app.views.fragments.Fragment_Step;
 
 public class Activity_Details extends AppCompatActivity implements Fragment_DetailsList.StepClickListener {
 
@@ -29,14 +27,17 @@ public class Activity_Details extends AppCompatActivity implements Fragment_Deta
     // We will initially load the ingredients list fragment
     private boolean mShowIngredients = true;
 
-    private FrameLayout frame_ingredients;
-    private FrameLayout frame_media_video;
     private FrameLayout frame_details;
+
+
+    private FragmentManager mFragmentManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
+
+        mFragmentManager = getSupportFragmentManager();
 
         if (savedInstanceState != null) {
             Log.i(Constants.LOG_TAG, "savedInstanceState is not null");
@@ -56,26 +57,27 @@ public class Activity_Details extends AppCompatActivity implements Fragment_Deta
             actionBar.setTitle(mRecipe.getName());
         }
 
-        Log.i(Constants.LOG_TAG, "Recipe id in onCreate(): " + mRecipe.getId());
-        replaceMasterListFragment();
 
+
+        Log.i(Constants.LOG_TAG, "Recipe id in onCreate(): " + mRecipe.getId());
+
+        // Add master list fragment to the screen
+        addMasterListFragment();
 
         // Determine if you're creating a two-pane or single-pane display
         if (findViewById(R.id.layout_for_two_cols) != null) {
             Log.i(Constants.LOG_TAG, "We have 2 columns to show");
 
-            frame_ingredients = (FrameLayout) findViewById(R.id.container_ingredients);
-            frame_media_video = (FrameLayout) findViewById(R.id.container_media_video);
-
             // This LinearLayout will only initially exist in the two-col tablet case
             mTwoCols = true;
 
+            // Get a ref to the details container
+            frame_details = (FrameLayout) findViewById(R.id.container_details);
 
             if (savedInstanceState == null) {
 
-                replaceFragments(false);
-
-
+                // Start by showing the ingredients
+                addIngredientsFragment();
             }
 
         } else {
@@ -86,87 +88,81 @@ public class Activity_Details extends AppCompatActivity implements Fragment_Deta
 
     }
 
-    public void replaceMasterListFragment() {
+    private void addIngredientsFragment() {
 
-        FragmentManager fragmentManager = getSupportFragmentManager();
+        Fragment_Ingredients frag_ingredients = new Fragment_Ingredients();
+
+        Bundle bundle = new Bundle();
+        bundle.putInt(Constants.EXTRA_RECIPE_ID, mRecipe.getId());
+        frag_ingredients.setArguments(bundle);
+
+        mFragmentManager.beginTransaction()
+                .add(R.id.container_details, frag_ingredients).commit();
+
+    }
+
+    public void addMasterListFragment() {
 
         Fragment_DetailsList frag_details_list = new Fragment_DetailsList();
 
         Bundle bundle = new Bundle();
-        bundle.putInt("edttext", mRecipe.getId());
+        bundle.putInt(Constants.EXTRA_RECIPE_ID, mRecipe.getId());
         frag_details_list.setArguments(bundle);
 
-
-        fragmentManager.beginTransaction()
+        mFragmentManager.beginTransaction()
                 .add(R.id.master_list_fragment, frag_details_list).commit();
 
 
     }
 
-    public void replaceVideoMediaFragment(Step step) {
+    public void replaceDetailsFragmentWithStepFrag(Step step) {
 
-        frame_media_video.setVisibility(View.VISIBLE);
-        frame_ingredients.setVisibility(View.GONE);
-
-        FragmentManager fragmentManager = getSupportFragmentManager();
-
-        Fragment_Media_Video frag_media = new Fragment_Media_Video();
-
+        // Put this information in a Bundle and attach it to an Intent that will launch an Ingredients Activity
         Bundle bundle = new Bundle();
         bundle.putParcelable(Constants.EXTRA_STEP, step);
-        frag_media.setArguments(bundle);
+        bundle.putString(Constants.EXTRA_RECIPE_NAME, mRecipe.getName());
 
+        if(mTwoCols){
+            Fragment_Step frag = new Fragment_Step();
+            frag.setArguments(bundle);
 
-        fragmentManager.beginTransaction()
-                .add(R.id.container_media_video, frag_media).commit();
+            mFragmentManager.beginTransaction()
+                    .replace(R.id.container_details, frag).commit();
+        }else{
+            // Attach the Bundle to an intent
+            final Intent intent = new Intent(this, Activity_Step.class);
 
+            intent.putExtras(bundle);
+            startActivity(intent);
+        }
 
     }
 
-    public void replaceFragments(boolean showIngredients) {
+    public void replaceDetailsFragmentWithIngredientsFrag() {
 
-        mShowIngredients = showIngredients;
+        // Put this information in a Bundle and attach it to an Intent that will launch an Ingredients Activity
+        Bundle bundle = new Bundle();
+        bundle.putInt(Constants.EXTRA_RECIPE_ID, mRecipe.getId());
+        bundle.putString(Constants.EXTRA_RECIPE_NAME, mRecipe.getName());
 
-        // In two-pane mode, add initial BodyPartFragments to the screen
-        FragmentManager fragmentManager = getSupportFragmentManager();
+        if(mTwoCols){
+            Fragment_Ingredients frag_ingredients = new Fragment_Ingredients();
+            frag_ingredients.setArguments(bundle);
 
-        if (mTwoCols) {
+            mFragmentManager.beginTransaction()
+                    .replace(R.id.container_details, frag_ingredients).commit();
+        }else{
+            // Attach the Bundle to an intent
+            final Intent intent = new Intent(this, Activity_Ingredients.class);
 
-            if (mShowIngredients) {
-
-                Log.i(Constants.LOG_TAG, "Show Ingredients");
-
-
-                frame_media_video.setVisibility(View.GONE);
-                frame_ingredients.setVisibility(View.VISIBLE);
-
-                // Creating a ingredients fragment
-                Fragment_Ingredients frag_ingredients = new Fragment_Ingredients();
-                frag_ingredients.setRecipeId(44);
-
-                // Add the fragment to its container using a transaction
-                fragmentManager.beginTransaction()
-                        .add(R.id.container_ingredients, frag_ingredients)
-                        .commit();
-            }
-
-//            } else {
-//
-//                Log.i(Constants.LOG_TAG, "Show Video");
-//
-//                frame_media_video.setVisibility(View.VISIBLE);
-//                frame_ingredients.setVisibility(View.GONE);
-//
-//                // Creating a video fragment
-//                Fragment_Media_Video frag_video = new Fragment_Media_Video();
-//
-//                // Add the fragment to its container using a transaction
-//                fragmentManager.beginTransaction()
-//                        .add(R.id.container_media_video, frag_video)
-//                        .commit();
-//
-//            }
+            intent.putExtras(bundle);
+            startActivity(intent);
         }
+
+
+
+
+
     }
 
     @Override
@@ -185,8 +181,8 @@ public class Activity_Details extends AppCompatActivity implements Fragment_Deta
         if (step.getVideoURL().length() != 0) {
             Utils_General.showToast(this, "We have a Video:" + step.getVideoURL());
 
-            // Load media Fragment for videos
-            replaceVideoMediaFragment(step);
+            // Load step fragment
+            replaceDetailsFragmentWithStepFrag(step);
 
 
         } else if (step.getThumbnailURL().length() != 0) {
@@ -194,7 +190,5 @@ public class Activity_Details extends AppCompatActivity implements Fragment_Deta
         }
     }
 
-    private void loadFragmentForVideo() {
 
-    }
 }

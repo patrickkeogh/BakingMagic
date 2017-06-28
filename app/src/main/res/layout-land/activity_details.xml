@@ -9,14 +9,6 @@
     <!--
     This layout is a two-pane layout for the master/detail flow.
     -->
-
-    <!-- The Details List Fragment -->
-    <!--<fragment-->
-    <!--android:id="@+id/master_list_fragment"-->
-    <!--android:name="com.programming.kantech.bakingmagic.app.views.fragments.Fragment_DetailsList"-->
-    <!--android:layout_width="400dp"-->
-    <!--android:layout_height="match_parent" />-->
-
     <FrameLayout
         android:id="@+id/master_list_fragment"
         android:layout_width="400dp"
@@ -30,7 +22,7 @@
         android:layout_height="match_parent"
         android:background="@android:color/darker_gray" />
 
-    <!-- LinearLayout that arranges all three Android-Me body part images vertically -->
+
     <LinearLayout
         android:id="@+id/layout_for_two_cols"
         android:layout_width="match_parent"
@@ -39,24 +31,12 @@
         android:background="@color/colorPrimary"
         android:orientation="vertical">
 
-        <!-- Three vertically arranged body part fragments - the frame layouts are containers -
-        one for each Android-Me part (head, body, legs) -->
-
         <FrameLayout
-            android:id="@+id/container_ingredients"
+            android:id="@+id/container_details"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/colorAccent"
             android:scaleType="centerInside" />
-
-        <FrameLayout
-            android:id="@+id/container_media_video"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/colorAccent"
-            android:scaleType="centerInside" />
-
-
 
     </LinearLayout>
 

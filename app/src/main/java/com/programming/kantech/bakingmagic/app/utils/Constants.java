@@ -15,6 +15,8 @@ public class Constants {
      */
     public final static String LOG_TAG = "KanTech Baking App:";
 
+    public static final String BASE_PATH = "http://go.udacity.com/";
+
     /**
      * The "Content authority" is a name for the entire content provider, similar to the
      * relationship between a domain name and its website.  A convenient string to use for the
@@ -30,6 +32,9 @@ public class Constants {
      */
     public static final String EXTRA_RECIPE = "extra_recipe";
     public static final String EXTRA_STEP = "extra_step";
+    public static final String EXTRA_RECIPE_ID = "extra_recipe_id";
+    public static final String EXTRA_RECIPE_NAME = "extra_recipe_name";
+    public static final String EXTRA_INGREDIENTS_LIST = "extra_ingredients_list";
 
     /**
      * The Constants used for data added to savedInstanceState
@@ -37,6 +42,7 @@ public class Constants {
 
     public static final String STATE_INFO_RECIPE_ID = "state_info_recipe_id";
     public static final String STATE_INFO_RECIPE = "state_info_recipe";
+    public static final String STATE_INFO_RECIPE_NAME = "state_info_recipe_name";
     public static final String STATE_INFO_INGEDIENTS_LIST = "state_info_ingredients_list";
 
     // The loader's unique id. Loader ids are specific to the Activity or
