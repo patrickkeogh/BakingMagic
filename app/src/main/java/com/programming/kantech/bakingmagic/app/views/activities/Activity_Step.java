@@ -105,7 +105,7 @@ public class Activity_Step extends AppCompatActivity implements Fragment_Step.St
     }
 
     /**
-     * Our own implementation of the AsyncQueryHandler.
+     * My implementation of the AsyncQueryHandler.
      */
     private static class StepCountAsyncQueryHandler extends AsyncQueryHandler {
 
@@ -140,10 +140,7 @@ public class Activity_Step extends AppCompatActivity implements Fragment_Step.St
                     Utils_General.showToast(mActivity.get(), "No video");
                 }
 
-
             }
-
-
         }
     }
 
