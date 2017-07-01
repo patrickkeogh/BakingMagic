@@ -1,29 +1,27 @@
 package com.programming.kantech.bakingmagic.app.views.activities;
 
+import android.app.Activity;
 import android.content.AsyncQueryHandler;
-import android.content.ContentResolver;
-import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 
 import com.programming.kantech.bakingmagic.app.R;
-import com.programming.kantech.bakingmagic.app.data.model.pojo.Recipe;
 import com.programming.kantech.bakingmagic.app.data.model.pojo.Step;
 import com.programming.kantech.bakingmagic.app.provider.Contract_BakingMagic;
 import com.programming.kantech.bakingmagic.app.utils.Constants;
 import com.programming.kantech.bakingmagic.app.utils.Utils_General;
-import com.programming.kantech.bakingmagic.app.views.fragments.Fragment_Ingredients;
 import com.programming.kantech.bakingmagic.app.views.fragments.Fragment_Step;
+
+import java.lang.ref.WeakReference;
 
 public class Activity_Step extends AppCompatActivity implements Fragment_Step.StepNavClickListener {
 
-    private Step mStep;
+    private static Step mStep;
     private String mRecipe_Name;
 
     @Override
@@ -71,6 +69,9 @@ public class Activity_Step extends AppCompatActivity implements Fragment_Step.St
     @Override
     public void onNextStepSelected() {
 
+        /* URI for all rows of data in our step table */
+        Uri uri = Contract_BakingMagic.StepsEntry.CONTENT_URI;
+
         // Assuming the validation in the fragment worked, we should not get requests
         // that we dont have steps for
         int nextId = mStep.getId() + 1;
@@ -78,12 +79,17 @@ public class Activity_Step extends AppCompatActivity implements Fragment_Step.St
         String selection = Contract_BakingMagic.StepsEntry.COLUMN_STEP_ID + "=?";
         String[] selectionArgs = {"" + nextId};
 
-        getStepFromDB(selection, selectionArgs);
+        StepCountAsyncQueryHandler handler = new StepCountAsyncQueryHandler(this);
+
+        handler.startQuery(0, null, uri, null, selection, selectionArgs, null);
 
     }
 
     @Override
     public void onPreviousStepSelected() {
+
+        /* URI for all rows of data in our step table */
+        Uri uri = Contract_BakingMagic.StepsEntry.CONTENT_URI;
 
         // Assuming the validation in the fragment worked, we should not get requests
         // that we dont have steps for
@@ -92,45 +98,53 @@ public class Activity_Step extends AppCompatActivity implements Fragment_Step.St
         String selection = Contract_BakingMagic.StepsEntry.COLUMN_STEP_ID + "=?";
         String[] selectionArgs = {"" + nextId};
 
-        getStepFromDB(selection, selectionArgs);
+        StepCountAsyncQueryHandler handler = new StepCountAsyncQueryHandler(this);
+
+        handler.startQuery(0, null, uri, null, selection, selectionArgs, null);
 
     }
 
-    private void getStepFromDB(String selection, String[] args) {
+    /**
+     * Our own implementation of the AsyncQueryHandler.
+     */
+    private static class StepCountAsyncQueryHandler extends AsyncQueryHandler {
 
-        ContentResolver resolver = getContentResolver();
+        private final WeakReference<Activity_Step> mActivity;
 
-        /* URI for all rows of data in our step table */
-        Uri uri = Contract_BakingMagic.StepsEntry.CONTENT_URI;
+        private StepCountAsyncQueryHandler(Activity activity) {
+            super(activity.getContentResolver());
+            mActivity = new WeakReference<>((Activity_Step) activity);
+        }
 
-        new AsyncQueryHandler(resolver) {
-            @Override
-            protected void onQueryComplete(int token, Object cookie,
-                                           Cursor cursor) {
+        @Override
+        protected void onQueryComplete(int token, Object cookie, Cursor cursor) {
 
-                // Check if an error was returned
-                if (null == cursor || cursor.getCount() == 0) {
-                    Log.i(Constants.LOG_TAG, "There was an error getting the steps for a count");
-                } else {
-                    cursor.moveToFirst();
-                    // Replace the fragment with the new step
+            // ToDo: Do I still need to call this?????
+            //super.onQueryComplete(token, cookie, cursor);
 
-                    mStep = Contract_BakingMagic.StepsEntry.getStepFromCursor(cursor);
+            // Check if an error was returned
+            if (null == cursor || cursor.getCount() == 0) {
+                Log.i(Constants.LOG_TAG, "There was an error getting the steps for a count");
+            } else {
+                cursor.moveToFirst();
+                // Replace the fragment with the new step
 
-                    if (mStep.getVideoURL().length() != 0) {
+                mStep = Contract_BakingMagic.StepsEntry.getStepFromCursor(cursor);
 
-                        // Load step fragment
-                        replaceDetailsFragmentWithStepFrag();
+                if (mStep.getVideoURL().length() != 0) {
+                    // Load step fragment
+                    mActivity.get().replaceDetailsFragmentWithStepFrag();
 
-
-                    } else if (mStep.getThumbnailURL().length() != 0) {
-                        // TODO: Handle steps with images, and no videos
-                    }
-
-
+                } else if (mStep.getThumbnailURL().length() != 0) {
+                    // TODO: Handle steps with images, and no videos
+                    Utils_General.showToast(mActivity.get(), "No video");
                 }
+
+
             }
-        }.startQuery(0, null, uri, null, selection, args, null);
+
+
+        }
     }
 
     public void replaceDetailsFragmentWithStepFrag() {
