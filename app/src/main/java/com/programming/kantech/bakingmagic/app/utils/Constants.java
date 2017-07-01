@@ -25,8 +25,6 @@ public class Constants {
      */
     public static final String CONTENT_AUTHORITY = "com.programming.kantech.bakingmagic.app";
 
-
-
     /**
      * The Constants used for data added as extras to intents
      */
@@ -34,16 +32,16 @@ public class Constants {
     public static final String EXTRA_STEP = "extra_step";
     public static final String EXTRA_RECIPE_ID = "extra_recipe_id";
     public static final String EXTRA_RECIPE_NAME = "extra_recipe_name";
-    public static final String EXTRA_INGREDIENTS_LIST = "extra_ingredients_list";
+    public static final String EXTRA_STEP_COUNT = "extra_step_count";
 
     /**
-     * The Constants used for data added to savedInstanceState
-     */
+     * The Constants used for data added to savedInstanceState     */
 
     public static final String STATE_INFO_RECIPE_ID = "state_info_recipe_id";
     public static final String STATE_INFO_RECIPE = "state_info_recipe";
     public static final String STATE_INFO_RECIPE_NAME = "state_info_recipe_name";
-    public static final String STATE_INFO_INGEDIENTS_LIST = "state_info_ingredients_list";
+    public static final String STATE_INFO_STEP = "state_info_step";
+    public static final String STATE_INFO_STEP_COUNT = "state_info_step_count";
 
     // The loader's unique id. Loader ids are specific to the Activity or
     // Fragment in which they reside.

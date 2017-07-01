@@ -23,6 +23,7 @@ public class Activity_Details extends AppCompatActivity implements Fragment_Deta
     // A single-column display refers to phone screens, and two-column to larger tablet screens
     private boolean mTwoCols;
     private Recipe mRecipe;
+    private int mStepCount;
 
     // We will initially load the ingredients list fragment
     private boolean mShowIngredients = true;
@@ -57,12 +58,12 @@ public class Activity_Details extends AppCompatActivity implements Fragment_Deta
             actionBar.setTitle(mRecipe.getName());
         }
 
-
+        // Add master list fragment to the screen
+        addMasterListFragment();
 
         Log.i(Constants.LOG_TAG, "Recipe id in onCreate(): " + mRecipe.getId());
 
-        // Add master list fragment to the screen
-        addMasterListFragment();
+
 
         // Determine if you're creating a two-pane or single-pane display
         if (findViewById(R.id.layout_for_two_cols) != null) {
@@ -75,6 +76,8 @@ public class Activity_Details extends AppCompatActivity implements Fragment_Deta
             frame_details = (FrameLayout) findViewById(R.id.container_details);
 
             if (savedInstanceState == null) {
+
+
 
                 // Start by showing the ingredients
                 addIngredientsFragment();
@@ -158,11 +161,6 @@ public class Activity_Details extends AppCompatActivity implements Fragment_Deta
             intent.putExtras(bundle);
             startActivity(intent);
         }
-
-
-
-
-
     }
 
     @Override

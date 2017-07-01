@@ -140,8 +140,6 @@ public class Fragment_DetailsList extends Fragment implements LoaderManager.Load
         switch (loaderId) {
             case Constants.STEPS_DETAIL_LOADER:
 
-                //Log.i(Constants.LOG_TAG, "Recipe Id in OnCreateLoader:" + mRecipe_Id);
-
                 String selection = Contract_BakingMagic.StepsEntry.COLUMN_RECIPE_ID + "=?";
                 String[] selectionArgs = {"" + mRecipe_Id};
 
@@ -149,12 +147,14 @@ public class Fragment_DetailsList extends Fragment implements LoaderManager.Load
                 /* URI for all rows of data in our gatherings table */
                 Uri uri = Contract_BakingMagic.StepsEntry.CONTENT_URI;
 
+                String orberBy = Contract_BakingMagic.StepsEntry.COLUMN_STEP_ID + " ASC";
+
                 return new android.support.v4.content.CursorLoader(getActivity(),
                         uri,
                         Constants.LOADER_STEP_DETAIL_COLUMNS,
                         selection,
                         selectionArgs,
-                        null);
+                        orberBy);
 
             default:
                 throw new RuntimeException("Loader Not Implemented: " + loaderId);
