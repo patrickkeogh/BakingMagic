@@ -1,19 +1,17 @@
 package com.programming.kantech.bakingmagic.app.views.fragments;
 
+import android.app.Activity;
 import android.content.AsyncQueryHandler;
-import android.content.ContentResolver;
+import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.android.exoplayer2.DefaultLoadControl;
@@ -32,8 +30,8 @@ import com.programming.kantech.bakingmagic.app.R;
 import com.programming.kantech.bakingmagic.app.data.model.pojo.Step;
 import com.programming.kantech.bakingmagic.app.provider.Contract_BakingMagic;
 import com.programming.kantech.bakingmagic.app.utils.Constants;
-import com.programming.kantech.bakingmagic.app.views.activities.Activity_Details;
-import com.programming.kantech.bakingmagic.app.views.activities.Activity_Step;
+
+import java.lang.ref.WeakReference;
 
 /**
  * Created by patrick keogh on 2017-06-24.
@@ -41,8 +39,8 @@ import com.programming.kantech.bakingmagic.app.views.activities.Activity_Step;
 
 public class Fragment_Step extends Fragment {
 
-    private Step mStep;
-    private int mStepCount;
+    private static Step mStep;
+    private static int mStepCount;
 
     private SimpleExoPlayer mExoPlayer;
     private SimpleExoPlayerView mPlayerView;
@@ -71,10 +69,10 @@ public class Fragment_Step extends Fragment {
 
         // Load the saved state if there is one,
         // if not get Step from the arguments bundle
-        if(savedInstanceState != null) {
+        if (savedInstanceState != null) {
             mStep = savedInstanceState.getParcelable(Constants.STATE_INFO_STEP);
             mStepCount = savedInstanceState.getInt(Constants.STATE_INFO_STEP_COUNT);
-        }else{
+        } else {
             Log.i(Constants.LOG_TAG, "savedInstanceState is null, get data from intent");
 
             Bundle args = getArguments();
@@ -94,7 +92,15 @@ public class Fragment_Step extends Fragment {
         if (mStep != null) {
             tv_title.setText(mStep.getShortDescription());
             tv_description.setText(mStep.getDescription());
-            getStepCount();
+
+            String selection = Contract_BakingMagic.StepsEntry.COLUMN_RECIPE_ID + "=?";
+            String[] selectionArgs = {"" + mStep.getRecipe_id()};
+
+                /* URI for all rows of data in our gatherings table */
+            Uri uri = Contract_BakingMagic.StepsEntry.CONTENT_URI;
+
+            StepCountAsyncQueryHandler handler = new StepCountAsyncQueryHandler(getActivity(), this);
+            handler.startQuery(0, null, uri, null, selection, selectionArgs, null);
         }
 
         // Determine if we have step navigation (only in portrait view)
@@ -104,7 +110,7 @@ public class Fragment_Step extends Fragment {
             mPreviousStep.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    ((Activity_Step) getActivity()).onPreviousStepSelected();
+                    mCallback.onPreviousStepSelected();
                 }
             });
 
@@ -112,7 +118,7 @@ public class Fragment_Step extends Fragment {
             mNextStep.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    ((Activity_Step) getActivity()).onNextStepSelected();
+                    mCallback.onNextStepSelected();
 
                 }
             });
@@ -127,59 +133,68 @@ public class Fragment_Step extends Fragment {
         return rootView;
     }
 
-    private void getStepCount() {
+    // Override onAttach to make sure that the container activity has implemented the callback
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
 
-        ContentResolver resolver = getActivity().getContentResolver();
+        // This makes sure that the host activity has implemented the callback interface
+        // If not, it throws an exception
+        try {
+            mCallback = (Fragment_Step.StepNavClickListener) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString()
+                    + " must implement StepClickListener");
+        }
+    }
 
-        final Cursor mCursor;
+    /**
+     * My implementation of the AsyncQueryHandler.
+     */
+    private static class StepCountAsyncQueryHandler extends AsyncQueryHandler {
 
-        String selection = Contract_BakingMagic.StepsEntry.COLUMN_RECIPE_ID + "=?";
-        String[] selectionArgs = {"" + mStep.getRecipe_id()};
+        private final WeakReference<Fragment_Step> mFragment;
 
-                /* URI for all rows of data in our gatherings table */
-        Uri uri = Contract_BakingMagic.StepsEntry.CONTENT_URI;
+        private StepCountAsyncQueryHandler(Activity activity, Fragment_Step fragment) {
+            super(activity.getContentResolver());
 
-//        mCursor = resolver.query(
-//                uri,                        // The content URI of the words table
-//                null,                       // The columns to return for each row (projection)
-//                selection,                   // Either null, or the word the user entered
-//                selectionArgs,                    // Either empty, or the string the user entered
-//                null);                       // The sort order for the returned rows
+            mFragment = new WeakReference<>(fragment);
+        }
 
-        new AsyncQueryHandler(resolver) {
-            @Override
-            protected void onQueryComplete(int token, Object cookie,
-                                           Cursor cursor) {
+        @Override
+        protected void onQueryComplete(int token, Object cookie, Cursor cursor) {
+            // ToDo: Do I still need to call this?????
+            //super.onQueryComplete(token, cookie, cursor);
 
-                // Check if an error was returned
-                if (null == cursor) {
+            // Check if an error was returned
+            if (null == cursor) {
 
-                    Log.i(Constants.LOG_TAG, "There was an error getting the steps for a count");
+                Log.i(Constants.LOG_TAG, "There was an error getting the steps for a count");
 
-                    // If the Cursor is empty, the provider found no matches
-                } else if (cursor.getCount() < 1) {
-                    Log.i(Constants.LOG_TAG, "There was an error, the count returned 0 steps");
+                // If the Cursor is empty, the provider found no matches
+            } else if (cursor.getCount() < 1) {
+                Log.i(Constants.LOG_TAG, "There was an error, the count returned 0 steps");
+            } else {
+                // Get the count
+                mStepCount = cursor.getCount();
+                Log.i(Constants.LOG_TAG, "Count returned is: " + mStepCount);
+
+                if ((mStep.getId() + 1) < mStepCount) {
+
+                    mFragment.get().setVisibilityNextStep(View.VISIBLE);
                 } else {
-                    // Get the count
-                    mStepCount = cursor.getCount();
-                    Log.i(Constants.LOG_TAG, "Count returned is: " + mStepCount);
+                    mFragment.get().setVisibilityNextStep(View.INVISIBLE);
+                }
 
-                    if((mStep.getId()+ 1) < mStepCount){
-                        mNextStep.setVisibility(View.VISIBLE);
-                    }else{
-                        mNextStep.setVisibility(View.INVISIBLE);
-                    }
-
-                    if(mStep.getId() == 0){
-                        mPreviousStep.setVisibility(View.INVISIBLE);
-                    }else{
-                        mPreviousStep.setVisibility(View.VISIBLE);
-                    }
+                if (mStep.getId() == 0) {
+                    mFragment.get().setVisibilityPreviousStep(View.INVISIBLE);
+                } else {
+                    mFragment.get().setVisibilityPreviousStep(View.VISIBLE);
                 }
             }
-        }.startQuery(0, null, uri, null, selection, selectionArgs, null);
 
 
+        }
     }
 
     /**
@@ -193,6 +208,7 @@ public class Fragment_Step extends Fragment {
 
     /**
      * Initialize ExoPlayer.
+     *
      * @param mediaUri The URI of the sample to play.
      */
     private void initializePlayer(Uri mediaUri) {
@@ -226,6 +242,11 @@ public class Fragment_Step extends Fragment {
         mExoPlayer = null;
     }
 
+    public void setVisibilityPreviousStep(int visible) {
+        mPreviousStep.setVisibility(visible);
+    }
 
-
+    public void setVisibilityNextStep(int visible) {
+        mNextStep.setVisibility(visible);
+    }
 }

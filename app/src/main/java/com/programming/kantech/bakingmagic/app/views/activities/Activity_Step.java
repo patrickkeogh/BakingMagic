@@ -79,7 +79,7 @@ public class Activity_Step extends AppCompatActivity implements Fragment_Step.St
         String selection = Contract_BakingMagic.StepsEntry.COLUMN_STEP_ID + "=?";
         String[] selectionArgs = {"" + nextId};
 
-        StepCountAsyncQueryHandler handler = new StepCountAsyncQueryHandler(this);
+        GetStepAsyncQueryHandler handler = new GetStepAsyncQueryHandler(this);
 
         handler.startQuery(0, null, uri, null, selection, selectionArgs, null);
 
@@ -98,7 +98,7 @@ public class Activity_Step extends AppCompatActivity implements Fragment_Step.St
         String selection = Contract_BakingMagic.StepsEntry.COLUMN_STEP_ID + "=?";
         String[] selectionArgs = {"" + nextId};
 
-        StepCountAsyncQueryHandler handler = new StepCountAsyncQueryHandler(this);
+        GetStepAsyncQueryHandler handler = new GetStepAsyncQueryHandler(this);
 
         handler.startQuery(0, null, uri, null, selection, selectionArgs, null);
 
@@ -107,11 +107,11 @@ public class Activity_Step extends AppCompatActivity implements Fragment_Step.St
     /**
      * My implementation of the AsyncQueryHandler.
      */
-    private static class StepCountAsyncQueryHandler extends AsyncQueryHandler {
+    private static class GetStepAsyncQueryHandler extends AsyncQueryHandler {
 
         private final WeakReference<Activity_Step> mActivity;
 
-        private StepCountAsyncQueryHandler(Activity activity) {
+        private GetStepAsyncQueryHandler(Activity activity) {
             super(activity.getContentResolver());
             mActivity = new WeakReference<>((Activity_Step) activity);
         }
