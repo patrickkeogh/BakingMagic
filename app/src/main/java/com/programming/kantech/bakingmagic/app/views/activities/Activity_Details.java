@@ -75,7 +75,7 @@ public class Activity_Details extends AppCompatActivity implements Fragment_Step
         // Set the action bar back button to look like an up button
         ActionBar actionBar = this.getSupportActionBar();
         if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
+            //actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setTitle(mRecipe.getName());
         }
 
@@ -123,33 +123,33 @@ public class Activity_Details extends AppCompatActivity implements Fragment_Step
         }
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        int id = item.getItemId();
-
-        // When the home button is pressed, determine what to do
-        if (id == android.R.id.home) {
-            if(mTwoCols){
-                NavUtils.navigateUpFromSameTask(this);
-            }else{
-
-                // Find out what fragment is showing in the master container
-                mFragment = new Fragment();
-                mFragment = mFragmentManager.findFragmentById(R.id.container_master);
-
-                // If details list is not showing, we are showing a child fregment
-                if(!(mFragment instanceof Fragment_DetailsList)){
-                    replaceMasterListFragment();
-                }else{
-                    NavUtils.navigateUpFromSameTask(this);
-                }
-
-            }
-
-        }
-        return super.onOptionsItemSelected(item);
-    }
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//
+//        int id = item.getItemId();
+//
+//        // When the home button is pressed, determine what to do
+//        if (id == android.R.id.home) {
+//            if(mTwoCols){
+//                NavUtils.navigateUpFromSameTask(this);
+//            }else{
+//
+//                // Find out what fragment is showing in the master container
+//                mFragment = new Fragment();
+//                mFragment = mFragmentManager.findFragmentById(R.id.container_master);
+//
+//                // If details list is not showing, we are showing a child fregment
+//                if(!(mFragment instanceof Fragment_DetailsList)){
+//                    replaceMasterListFragment();
+//                }else{
+//                    NavUtils.navigateUpFromSameTask(this);
+//                }
+//
+//            }
+//
+//        }
+//        return super.onOptionsItemSelected(item);
+//    }
 
     private void addIngredientsFragment() {
         Log.i(Constants.LOG_TAG, "addIngredientsFragment called()");
@@ -178,7 +178,7 @@ public class Activity_Details extends AppCompatActivity implements Fragment_Step
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 
         transaction.add(R.id.container_master, frag_details_list, Constants.TAG_FRAGMENT_MASTER);
-        transaction.addToBackStack(Constants.TAG_FRAGMENT_MASTER);
+        transaction.addToBackStack(null);
 
         // Commit the transaction
         transaction.commit();
@@ -198,7 +198,7 @@ public class Activity_Details extends AppCompatActivity implements Fragment_Step
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 
         transaction.replace(R.id.container_master, frag_details_list, Constants.TAG_FRAGMENT_MASTER);
-        transaction.addToBackStack(Constants.TAG_FRAGMENT_MASTER);
+        transaction.addToBackStack(null);
 
         // Commit the transaction
         transaction.commit();
@@ -225,7 +225,7 @@ public class Activity_Details extends AppCompatActivity implements Fragment_Step
             // Replace whatever is in the fragment_container view with this fragment,
             // and add the transaction to the back stack so the user can navigate back
             transaction.replace(R.id.container_master, frag, Constants.TAG_FRAGMENT_STEP);
-            //transaction.addToBackStack(Constants.TAG_FRAGMENT_STEP);
+            transaction.addToBackStack(null);
         }
 
         // Commit the transaction
@@ -256,7 +256,7 @@ public class Activity_Details extends AppCompatActivity implements Fragment_Step
             // Replace whatever is in the fragment_container view with this fragment,
             // and add the transaction to the back stack so the user can navigate back
             transaction.replace(R.id.container_master, frag_ingredients, Constants.TAG_FRAGMENT_INGREDIENTS);
-            //transaction.addToBackStack(Constants.TAG_FRAGMENT_INGREDIENTS);
+            transaction.addToBackStack(null);
         }
 
         // Commit the transaction
