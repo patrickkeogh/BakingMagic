@@ -74,8 +74,9 @@ public class Activity_Details extends AppCompatActivity implements Fragment_Step
 
         // Set the action bar back button to look like an up button
         ActionBar actionBar = this.getSupportActionBar();
+
         if (actionBar != null) {
-            //actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setTitle(mRecipe.getName());
         }
 
