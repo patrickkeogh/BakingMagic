@@ -11,13 +11,12 @@
         android:textColor="@color/colorPrimaryDark"
         android:background="@color/colorPrimaryLight"
         android:text="@string/details_title_ingredients"
-
-        android:paddingBottom="8dp"
-        android:paddingLeft="8dp"
-        android:paddingStart="8dp"
-        android:paddingRight="8dp"
-        android:paddingEnd="8dp"
-        android:paddingTop="8dp"
+        android:paddingBottom="@dimen/padding_8dp"
+        android:paddingLeft="@dimen/padding_8dp"
+        android:paddingStart="@dimen/padding_8dp"
+        android:paddingRight="@dimen/padding_8dp"
+        android:paddingEnd="@dimen/padding_8dp"
+        android:paddingTop="@dimen/padding_8dp"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"/>
 
     <View

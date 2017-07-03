@@ -34,14 +34,18 @@ public class Constants {
     public static final String EXTRA_RECIPE_NAME = "extra_recipe_name";
     public static final String EXTRA_STEP_COUNT = "extra_step_count";
 
+    public static final String TAG_FRAGMENT_INGREDIENTS = "tag_frag_ingredients";
+    public static final String TAG_FRAGMENT_STEP = "tag_frag_step";
+    public static final String TAG_FRAGMENT_MASTER = "tag_frag_masters";
+
     /**
      * The Constants used for data added to savedInstanceState     */
 
     public static final String STATE_INFO_RECIPE_ID = "state_info_recipe_id";
     public static final String STATE_INFO_RECIPE = "state_info_recipe";
-    public static final String STATE_INFO_RECIPE_NAME = "state_info_recipe_name";
     public static final String STATE_INFO_STEP = "state_info_step";
-    public static final String STATE_INFO_STEP_COUNT = "state_info_step_count";
+    public static final String STATE_INFO_DETAILS_FRAGMENT = "state_info_details_fragment";
+
 
     // The loader's unique id. Loader ids are specific to the Activity or
     // Fragment in which they reside.

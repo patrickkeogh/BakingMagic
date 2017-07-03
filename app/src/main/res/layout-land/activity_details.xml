@@ -10,10 +10,9 @@
     This layout is a two-pane layout for the master/detail flow.
     -->
     <FrameLayout
-        android:id="@+id/master_list_fragment"
-        android:layout_width="400dp"
+        android:id="@+id/container_master"
+        android:layout_width="300dp"
         android:layout_height="match_parent"
-        android:background="@color/colorAccent"
         android:scaleType="centerInside" />
 
     <!-- A small divider -->
@@ -21,7 +20,6 @@
         android:layout_width="1dp"
         android:layout_height="match_parent"
         android:background="@android:color/darker_gray" />
-
 
     <LinearLayout
         android:id="@+id/layout_for_two_cols"
@@ -35,7 +33,7 @@
             android:id="@+id/container_details"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/colorAccent"
+            android:background="@color/colorLightGrey"
             android:scaleType="centerInside" />
 
     </LinearLayout>

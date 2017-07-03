@@ -55,10 +55,15 @@ public class Fragment_Ingredients extends Fragment implements  LoaderManager.Loa
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         // Load the saved state if there is one
-        if(savedInstanceState != null) {
-            mRecipeId = savedInstanceState.getInt(Constants.STATE_INFO_RECIPE_ID);
-        }else{
-            Log.i(Constants.LOG_TAG, "savedInstanceState is null, get data from intent");
+        if (savedInstanceState != null) {
+            Log.i(Constants.LOG_TAG, "Fragment_Ingredients savedInstanceState is not null");
+            if (savedInstanceState.containsKey(Constants.STATE_INFO_RECIPE_ID)) {
+                Log.i(Constants.LOG_TAG, "we found the recipe key in savedInstanceState");
+                mRecipeId = savedInstanceState.getInt(Constants.STATE_INFO_RECIPE_ID);
+            }
+
+        } else {
+            Log.i(Constants.LOG_TAG, "Fragment_Ingredients savedInstanceState is null, get data from intent");
             Bundle args = getArguments();
             mRecipeId = args.getInt(Constants.EXTRA_RECIPE_ID);
         }

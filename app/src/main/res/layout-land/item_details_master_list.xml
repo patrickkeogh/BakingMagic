@@ -19,7 +19,7 @@
         android:paddingEnd="@dimen/padding_8dp"
         android:paddingTop="@dimen/padding_8dp"
         android:maxLines="1"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large"/>
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"/>
 
     <View
         android:layout_width="fill_parent"
@@ -27,5 +27,3 @@
         android:background="@color/colorPrimaryDark" />
 
 </LinearLayout>
-
-

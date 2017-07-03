@@ -94,7 +94,7 @@ public class Adapter_Details_Steps extends RecyclerView.Adapter<Adapter_Details_
      */
     public void swapCursor(Cursor newCursor) {
         mCursor = newCursor;
-        Log.i(Constants.LOG_TAG, "swap Cusor called with:" + getItemCount());
+        //Log.i(Constants.LOG_TAG, "swap Cusor called with:" + getItemCount());
         notifyDataSetChanged();
     }
 

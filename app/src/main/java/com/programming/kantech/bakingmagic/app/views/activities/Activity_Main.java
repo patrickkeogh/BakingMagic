@@ -15,7 +15,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 
 import com.programming.kantech.bakingmagic.app.R;
 import com.programming.kantech.bakingmagic.app.data.model.pojo.Recipe;
@@ -36,10 +35,9 @@ import retrofit2.Call;
 
 /**
  * Created by patrick keogh on 2017-06-24.
+ *
  */
 public class Activity_Main extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>, Adapter_Recipe.OnClickHandler {
-
-    private static ApiInterface apiService;
 
     private Adapter_Recipe mAdapter;
 
@@ -59,10 +57,6 @@ public class Activity_Main extends AppCompatActivity implements LoaderManager.Lo
     AppBarLayout mAppbarLayout;
 
     private Context mContext;
-
-    private List<Recipe> mRecipes = new ArrayList<>();
-
-    private GridLayoutManager lLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,7 +96,7 @@ public class Activity_Main extends AppCompatActivity implements LoaderManager.Lo
             }
         });
 
-        apiService = ApiClient.getClient().create(ApiInterface.class);
+        ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
 
         Call<List<Recipe>> call = apiService.getRecipes();
 
@@ -110,7 +104,7 @@ public class Activity_Main extends AppCompatActivity implements LoaderManager.Lo
 
         new Task_GetRecipes(mContext).execute(call);
 
-        lLayout = new GridLayoutManager(Activity_Main.this, getResources().getInteger(R.integer.numOfCols));
+        GridLayoutManager lLayout = new GridLayoutManager(Activity_Main.this, getResources().getInteger(R.integer.numOfCols));
 
         mList = (RecyclerView)findViewById(R.id.rv_recipes);
         mList.setHasFixedSize(true);
@@ -160,7 +154,7 @@ public class Activity_Main extends AppCompatActivity implements LoaderManager.Lo
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
 
         Recipe recipe;
-        mRecipes = new ArrayList<>();
+        List<Recipe> mRecipes = new ArrayList<>();
 
         if(data != null) {
 
@@ -168,7 +162,7 @@ public class Activity_Main extends AppCompatActivity implements LoaderManager.Lo
             while (!data.isAfterLast())
             {
                 recipe = Contract_BakingMagic.RecipeEntry.getRecipeFromCursor(data);
-                Log.i(Constants.LOG_TAG, "Recipe in LoadFinished:" + recipe);
+                //Log.i(Constants.LOG_TAG, "Recipe in LoadFinished:" + recipe);
 
                 mRecipes.add(recipe);
 
@@ -197,7 +191,7 @@ public class Activity_Main extends AppCompatActivity implements LoaderManager.Lo
     @Override
     public void onClick(Recipe recipe) {
 
-        Log.i(Constants.LOG_TAG, "Recipe clicked:" + recipe.getName());
+        //Log.i(Constants.LOG_TAG, "Recipe clicked:" + recipe.getName());
 
         Intent intent = new Intent(Activity_Main.this, Activity_Details.class);
         intent.putExtra(Constants.EXTRA_RECIPE, recipe);

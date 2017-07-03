@@ -16,6 +16,7 @@ import com.programming.kantech.bakingmagic.app.utils.Constants;
 
 /**
  * Created by patrick keogh on 2017-06-24.
+ *
  */
 
 public class Provider_BakingMagic extends ContentProvider{
@@ -95,7 +96,7 @@ public class Provider_BakingMagic extends ContentProvider{
         // Query for the tasks directory and write a default case
         switch (match) {
             case RECIPES_ALL:
-                Log.i(Constants.LOG_TAG, "QUERY URI MATCH:MOVIES_ALL:" + uri);
+                //Log.i(Constants.LOG_TAG, "QUERY URI MATCH:MOVIES_ALL:" + uri);
                 retCursor = db.query(Contract_BakingMagic.RecipeEntry.TABLE_NAME,
                         projection,
                         selection,
@@ -103,11 +104,9 @@ public class Provider_BakingMagic extends ContentProvider{
                         null,
                         null,
                         sortOrder);
-
-                Log.i(Constants.LOG_TAG, "RecsFound:" + retCursor.getCount());
                 break;
             case INGREDIENTS_ALL:
-                Log.i(Constants.LOG_TAG, "QUERY URI MATCH:INGREDIENTS_ALL:" + uri);
+                //Log.i(Constants.LOG_TAG, "QUERY URI MATCH:INGREDIENTS_ALL:" + uri);
                 retCursor = db.query(Contract_BakingMagic.IngredientEntry.TABLE_NAME,
                         projection,
                         selection,
@@ -115,12 +114,10 @@ public class Provider_BakingMagic extends ContentProvider{
                         null,
                         null,
                         sortOrder);
-
-                Log.i(Constants.LOG_TAG, "RecsFound:" + retCursor.getCount());
                 break;
 
             case STEPS_ALL:
-                Log.i(Constants.LOG_TAG, "QUERY URI MATCH:STEPS_ALL:" + uri);
+                //Log.i(Constants.LOG_TAG, "QUERY URI MATCH:STEPS_ALL:" + uri);
                 retCursor = db.query(Contract_BakingMagic.StepsEntry.TABLE_NAME,
                         projection,
                         selection,
@@ -128,16 +125,12 @@ public class Provider_BakingMagic extends ContentProvider{
                         null,
                         null,
                         sortOrder);
-
-                Log.i(Constants.LOG_TAG, "RecsFound:" + retCursor.getCount());
                 break;
 
             case INGREDIENTS_BY_ID:
-                Log.i(Constants.LOG_TAG, "QUERY URI MATCH:INGREDIENTS_BY_ID:" + uri);
+                //Log.i(Constants.LOG_TAG, "QUERY URI MATCH:INGREDIENTS_BY_ID:" + uri);
 
                 id = uri.getLastPathSegment();
-
-                Log.i(Constants.LOG_TAG, "ID TO QUERY BY:" + id);
 
                 retCursor = db.query(Contract_BakingMagic.RecipeEntry.TABLE_NAME,
                         projection,
@@ -149,11 +142,9 @@ public class Provider_BakingMagic extends ContentProvider{
 
                 break;
             case RECIPES_BY_ID:
-                Log.i(Constants.LOG_TAG, "QUERY URI MATCH:MOVIE_BY_ID:" + uri);
+                //Log.i(Constants.LOG_TAG, "QUERY URI MATCH:MOVIE_BY_ID:" + uri);
 
                 id = uri.getLastPathSegment();
-
-                Log.i(Constants.LOG_TAG, "ID TO QUERY BY:" + id);
 
                 retCursor = db.query(Contract_BakingMagic.RecipeEntry.TABLE_NAME,
                         projection,
@@ -191,7 +182,7 @@ public class Provider_BakingMagic extends ContentProvider{
 
         // Write URI matching code to identify the match for the tasks directory
         int match = sUriMatcher.match(uri);
-        Log.i(Constants.LOG_TAG, "Match:" + match);
+        //Log.i(Constants.LOG_TAG, "Match:" + match);
 
         // URI to be returned
         Uri returnUri;

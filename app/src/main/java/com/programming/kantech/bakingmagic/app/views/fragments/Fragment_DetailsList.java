@@ -10,7 +10,6 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,16 +17,15 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.programming.kantech.bakingmagic.app.R;
-import com.programming.kantech.bakingmagic.app.data.model.pojo.Ingredient;
 import com.programming.kantech.bakingmagic.app.data.model.pojo.Step;
 import com.programming.kantech.bakingmagic.app.provider.Contract_BakingMagic;
 import com.programming.kantech.bakingmagic.app.utils.Constants;
 import com.programming.kantech.bakingmagic.app.utils.Utils_General;
-import com.programming.kantech.bakingmagic.app.views.activities.Activity_Details;
 import com.programming.kantech.bakingmagic.app.views.ui.Adapter_Details_Steps;
 
 /**
  * Created by patrick keogh on 2017-06-24.
+ *
  */
 
 public class Fragment_DetailsList extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>,
@@ -40,13 +38,8 @@ public class Fragment_DetailsList extends Fragment implements LoaderManager.Load
     private RecyclerView rv_details_list;
 
     private ProgressBar mLoadingIndicator;
-    private TextView tv_ingredients;
 
     private int mRecipe_Id;
-
-
-    // Local member variables
-    private Ingredient mIngredient;
 
     // Define a new interface OnImageClickListener that triggers a callback in the host activity
     StepClickListener mCallback;
@@ -54,6 +47,8 @@ public class Fragment_DetailsList extends Fragment implements LoaderManager.Load
     // OnImageClickListener interface, calls a method in the host activity named onImageSelected
     public interface StepClickListener {
         void onStepSelected(Step step);
+
+        void replaceDetailsFragmentWithIngredientsFrag();
     }
 
 
@@ -76,7 +71,7 @@ public class Fragment_DetailsList extends Fragment implements LoaderManager.Load
 
 
         // Get a reference to the textview4
-        tv_ingredients = (TextView) rootView.findViewById(R.id.tv_ingredients);
+        TextView tv_ingredients = (TextView) rootView.findViewById(R.id.tv_ingredients);
 
         tv_ingredients.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -84,7 +79,7 @@ public class Fragment_DetailsList extends Fragment implements LoaderManager.Load
 
                 Utils_General.showToast(getActivity(), "We clicked the ingredients text");
 
-                ((Activity_Details) getActivity()).replaceDetailsFragmentWithIngredientsFrag();
+                mCallback.replaceDetailsFragmentWithIngredientsFrag();
 
             }
         });

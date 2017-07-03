@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.exoplayer2.DefaultLoadControl;
@@ -30,6 +31,8 @@ import com.programming.kantech.bakingmagic.app.R;
 import com.programming.kantech.bakingmagic.app.data.model.pojo.Step;
 import com.programming.kantech.bakingmagic.app.provider.Contract_BakingMagic;
 import com.programming.kantech.bakingmagic.app.utils.Constants;
+import com.programming.kantech.bakingmagic.app.utils.Utils_General;
+import com.squareup.picasso.Picasso;
 
 import java.lang.ref.WeakReference;
 
@@ -39,14 +42,14 @@ import java.lang.ref.WeakReference;
 
 public class Fragment_Step extends Fragment {
 
-    private static Step mStep;
-    private static int mStepCount;
+    private Step mStep;
 
     private SimpleExoPlayer mExoPlayer;
     private SimpleExoPlayerView mPlayerView;
 
     private TextView mPreviousStep;
     private TextView mNextStep;
+    private ImageView mImageView;
 
     // Define a new interface StepNavClickListener that triggers a callback in the host activity
     StepNavClickListener mCallback;
@@ -67,24 +70,26 @@ public class Fragment_Step extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        // Load the saved state if there is one,
-        // if not get Step from the arguments bundle
+        // Load the saved state if there is one
         if (savedInstanceState != null) {
-            mStep = savedInstanceState.getParcelable(Constants.STATE_INFO_STEP);
-            mStepCount = savedInstanceState.getInt(Constants.STATE_INFO_STEP_COUNT);
-        } else {
-            Log.i(Constants.LOG_TAG, "savedInstanceState is null, get data from intent");
+            Log.i(Constants.LOG_TAG, "Fragment_Step savedInstanceState is not null");
+            if (savedInstanceState.containsKey(Constants.STATE_INFO_STEP)) {
+                Log.i(Constants.LOG_TAG, "we found the step key in savedInstanceState");
+                mStep = savedInstanceState.getParcelable(Constants.STATE_INFO_STEP);
+            }
 
+        } else {
+            Log.i(Constants.LOG_TAG, "Fragment_Step savedInstanceState is null, get data from intent");
             Bundle args = getArguments();
             mStep = args.getParcelable(Constants.EXTRA_STEP);
-            mStepCount = args.getInt(Constants.EXTRA_STEP_COUNT);
         }
 
         // Inflate the step details fragment layout
         View rootView = inflater.inflate(R.layout.fragment_step_details, container, false);
 
-        // Initialize the player view.
+        // Initialize the player view and imageor the image view.
         mPlayerView = (SimpleExoPlayerView) rootView.findViewById(R.id.playerView);
+        mImageView = (ImageView) rootView.findViewById(R.id.iv_imageView);
 
         TextView tv_title = (TextView) rootView.findViewById(R.id.tv_step_title);
         TextView tv_description = (TextView) rootView.findViewById(R.id.tv_step_description);
@@ -93,14 +98,47 @@ public class Fragment_Step extends Fragment {
             tv_title.setText(mStep.getShortDescription());
             tv_description.setText(mStep.getDescription());
 
-            String selection = Contract_BakingMagic.StepsEntry.COLUMN_RECIPE_ID + "=?";
-            String[] selectionArgs = {"" + mStep.getRecipe_id()};
+            // set the nextand previous nav buttons if we have any
+            if (rootView.findViewById(R.id.layout_for_step_navigation) != null) {
+
+                String selection = Contract_BakingMagic.StepsEntry.COLUMN_RECIPE_ID + "=?";
+                String[] selectionArgs = {"" + mStep.getRecipe_id()};
 
                 /* URI for all rows of data in our gatherings table */
-            Uri uri = Contract_BakingMagic.StepsEntry.CONTENT_URI;
+                Uri uri = Contract_BakingMagic.StepsEntry.CONTENT_URI;
 
-            StepCountAsyncQueryHandler handler = new StepCountAsyncQueryHandler(getActivity(), this);
-            handler.startQuery(0, null, uri, null, selection, selectionArgs, null);
+                StepCountAsyncQueryHandler handler = new StepCountAsyncQueryHandler(getActivity(), this, mStep.getId());
+                handler.startQuery(0, null, uri, null, selection, selectionArgs, null);
+            }
+
+
+
+            if (mStep.getVideoURL().length() != 0) {
+                Utils_General.showToast(getActivity(), "No Image");
+                // Load the exo player and hide the image view
+                mImageView.setVisibility(View.GONE);
+
+                // Initialize the player.
+                initializePlayer(Uri.parse(mStep.getVideoURL()));
+
+            } else if (mStep.getThumbnailURL().length() != 0) {
+                Utils_General.showToast(getActivity(), "No video");
+
+                mPlayerView.setVisibility(View.GONE);
+
+                Picasso.with(getActivity())
+                        .load(mStep.getThumbnailURL())
+                        .placeholder(R.drawable.image)
+                        .error(R.drawable.image)
+                        .into(mImageView);
+            }else{
+
+                Utils_General.showToast(getActivity(), "No video or Image");
+
+                // Hide both Image and ExoPlayer
+                mPlayerView.setVisibility(View.GONE);
+                mImageView.setVisibility(View.GONE);
+            }
         }
 
         // Determine if we have step navigation (only in portrait view)
@@ -125,10 +163,7 @@ public class Fragment_Step extends Fragment {
         }
 
 
-        Log.i(Constants.LOG_TAG, "Step in Fragment Media:" + mStep.toString());
-
-        // Initialize the player.
-        initializePlayer(Uri.parse(mStep.getVideoURL()));
+        //Log.i(Constants.LOG_TAG, "Step in Fragment Media:" + mStep.toString());
 
         return rootView;
     }
@@ -154,11 +189,13 @@ public class Fragment_Step extends Fragment {
     private static class StepCountAsyncQueryHandler extends AsyncQueryHandler {
 
         private final WeakReference<Fragment_Step> mFragment;
+        private int stepId;
 
-        private StepCountAsyncQueryHandler(Activity activity, Fragment_Step fragment) {
+        private StepCountAsyncQueryHandler(Activity activity, Fragment_Step fragment, int step_id) {
             super(activity.getContentResolver());
 
             mFragment = new WeakReference<>(fragment);
+            this.stepId = step_id;
         }
 
         @Override
@@ -176,17 +213,17 @@ public class Fragment_Step extends Fragment {
                 Log.i(Constants.LOG_TAG, "There was an error, the count returned 0 steps");
             } else {
                 // Get the count
-                mStepCount = cursor.getCount();
-                Log.i(Constants.LOG_TAG, "Count returned is: " + mStepCount);
+                int count = cursor.getCount();
+                //Log.i(Constants.LOG_TAG, "Count returned is: " + count);
 
-                if ((mStep.getId() + 1) < mStepCount) {
+                if ((stepId + 1) < count) {
 
                     mFragment.get().setVisibilityNextStep(View.VISIBLE);
                 } else {
                     mFragment.get().setVisibilityNextStep(View.INVISIBLE);
                 }
 
-                if (mStep.getId() == 0) {
+                if (stepId == 0) {
                     mFragment.get().setVisibilityPreviousStep(View.INVISIBLE);
                 } else {
                     mFragment.get().setVisibilityPreviousStep(View.VISIBLE);
@@ -237,9 +274,12 @@ public class Fragment_Step extends Fragment {
      */
     private void releasePlayer() {
         Log.i(Constants.LOG_TAG, "releasePlayer called()");
-        mExoPlayer.stop();
-        mExoPlayer.release();
-        mExoPlayer = null;
+        if(mExoPlayer != null){
+            mExoPlayer.stop();
+            mExoPlayer.release();
+            mExoPlayer = null;
+        }
+
     }
 
     public void setVisibilityPreviousStep(int visible) {
