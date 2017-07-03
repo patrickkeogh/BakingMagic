@@ -124,6 +124,18 @@ public class Activity_Details extends AppCompatActivity implements Fragment_Step
         }
     }
 
+    @Override
+    public void onBackPressed(){
+        Log.i(Constants.LOG_TAG, "onBackPressed()");
+
+        if (getSupportFragmentManager().getBackStackEntryCount() == 1){
+            finish();
+        }
+        else {
+            super.onBackPressed();
+        }
+    }
+
 //    @Override
 //    public boolean onOptionsItemSelected(MenuItem item) {
 //
@@ -161,8 +173,13 @@ public class Activity_Details extends AppCompatActivity implements Fragment_Step
         bundle.putInt(Constants.EXTRA_RECIPE_ID, mRecipe.getId());
         frag_ingredients.setArguments(bundle);
 
-        mFragmentManager.beginTransaction()
-                .add(R.id.container_details, frag_ingredients, Constants.TAG_FRAGMENT_INGREDIENTS).commit();
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+
+        transaction.add(R.id.container_details, frag_ingredients, Constants.TAG_FRAGMENT_INGREDIENTS);
+        transaction.addToBackStack(null);
+
+        // Commit the transaction
+        transaction.commit();
 
     }
 
@@ -179,7 +196,7 @@ public class Activity_Details extends AppCompatActivity implements Fragment_Step
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 
         transaction.add(R.id.container_master, frag_details_list, Constants.TAG_FRAGMENT_MASTER);
-        transaction.addToBackStack(null);
+        //transaction.addToBackStack(null);
 
         // Commit the transaction
         transaction.commit();
