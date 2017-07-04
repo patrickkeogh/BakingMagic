@@ -2,6 +2,7 @@ package com.programming.kantech.bakingmagic.app.views.activities;
 
 import android.app.Activity;
 import android.content.AsyncQueryHandler;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -24,6 +25,8 @@ import com.programming.kantech.bakingmagic.app.views.fragments.Fragment_Ingredie
 import com.programming.kantech.bakingmagic.app.views.fragments.Fragment_Step;
 
 import java.lang.ref.WeakReference;
+import java.util.Iterator;
+import java.util.Set;
 
 public class Activity_Details extends AppCompatActivity implements Fragment_Step.StepNavClickListener,
         Fragment_DetailsList.StepClickListener {
@@ -68,6 +71,8 @@ public class Activity_Details extends AppCompatActivity implements Fragment_Step
             }
 
         } else {
+            Intent intent = getIntent();
+
             Log.i(Constants.LOG_TAG, "Activity_Details savedInstanceState is null, get data from intent");
             mRecipe = getIntent().getParcelableExtra(Constants.EXTRA_RECIPE);
         }
@@ -76,7 +81,6 @@ public class Activity_Details extends AppCompatActivity implements Fragment_Step
         ActionBar actionBar = this.getSupportActionBar();
 
         if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setTitle(mRecipe.getName());
         }
 
@@ -86,10 +90,13 @@ public class Activity_Details extends AppCompatActivity implements Fragment_Step
         }
 
 
-
         // Determine if you're creating a two-pane or single-pane display
         if (findViewById(R.id.layout_for_two_cols) != null) {
             Log.i(Constants.LOG_TAG, "We have 2 columns to show");
+
+            if (actionBar != null) {
+                actionBar.setDisplayHomeAsUpEnabled(true);
+            }
 
             // This LinearLayout will only initially exist in the two-col tablet case
             mTwoCols = true;
@@ -97,14 +104,14 @@ public class Activity_Details extends AppCompatActivity implements Fragment_Step
             if (savedInstanceState == null) {
                 // Start by showing the ingredients
                 addIngredientsFragment();
-            }else{
+            } else {
                 replaceMasterListFragment();
 
-                if(mFragment instanceof Fragment_Ingredients){
+                if (mFragment instanceof Fragment_Ingredients) {
                     Log.i(Constants.LOG_TAG, "Fragement instanceof Ingredients");
 
                     replaceDetailsFragmentWithIngredientsFrag();
-                }else if(mFragment instanceof Fragment_Step){
+                } else if (mFragment instanceof Fragment_Step) {
                     Log.i(Constants.LOG_TAG, "Fragement instanceof Step");
                     replaceDetailsFragmentWithStepFrag();
                 }
@@ -114,24 +121,27 @@ public class Activity_Details extends AppCompatActivity implements Fragment_Step
             Log.i(Constants.LOG_TAG, "We have 1 column to show");
             mTwoCols = false;
 
-            if(mFragment instanceof Fragment_Ingredients){
+            if (actionBar != null) {
+                actionBar.setDisplayHomeAsUpEnabled(false);
+            }
+
+            if (mFragment instanceof Fragment_Ingredients) {
                 replaceDetailsFragmentWithIngredientsFrag();
-            }else if(mFragment instanceof Fragment_Step){
+            } else if (mFragment instanceof Fragment_Step) {
                 replaceDetailsFragmentWithStepFrag();
-            }else {
+            } else {
                 replaceMasterListFragment();
             }
         }
     }
 
     @Override
-    public void onBackPressed(){
+    public void onBackPressed() {
         Log.i(Constants.LOG_TAG, "onBackPressed()");
 
-        if (getSupportFragmentManager().getBackStackEntryCount() == 1){
+        if (getSupportFragmentManager().getBackStackEntryCount() == 1) {
             finish();
-        }
-        else {
+        } else {
             super.onBackPressed();
         }
     }
@@ -227,7 +237,7 @@ public class Activity_Details extends AppCompatActivity implements Fragment_Step
 
         Log.i(Constants.LOG_TAG, "replaceDetailsFragmentWithStepFrag called()");
 
-         // Put this information in a Bundle and attach it to an Intent that will launch an Ingredients Activity
+        // Put this information in a Bundle and attach it to an Intent that will launch an Ingredients Activity
         Bundle bundle = new Bundle();
         bundle.putParcelable(Constants.EXTRA_STEP, mStep);
         bundle.putString(Constants.EXTRA_RECIPE_NAME, mRecipe.getName());
@@ -237,9 +247,9 @@ public class Activity_Details extends AppCompatActivity implements Fragment_Step
 
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 
-        if(mTwoCols){
+        if (mTwoCols) {
             transaction.replace(R.id.container_details, frag, Constants.TAG_FRAGMENT_STEP);
-        }else{
+        } else {
             // Replace whatever is in the fragment_container view with this fragment,
             // and add the transaction to the back stack so the user can navigate back
             transaction.replace(R.id.container_master, frag, Constants.TAG_FRAGMENT_STEP);
@@ -267,10 +277,10 @@ public class Activity_Details extends AppCompatActivity implements Fragment_Step
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 
         Log.i(Constants.LOG_TAG, "Activity details replaceDetailsFragmentWithIngredientsFrag TWOCols:" + mTwoCols);
-        if(mTwoCols){
+        if (mTwoCols) {
 
             transaction.replace(R.id.container_details, frag_ingredients, Constants.TAG_FRAGMENT_INGREDIENTS);
-        }else{
+        } else {
             // Replace whatever is in the fragment_container view with this fragment,
             // and add the transaction to the back stack so the user can navigate back
             transaction.replace(R.id.container_master, frag_ingredients, Constants.TAG_FRAGMENT_INGREDIENTS);
@@ -290,14 +300,14 @@ public class Activity_Details extends AppCompatActivity implements Fragment_Step
         outState.putParcelable(Constants.STATE_INFO_STEP, mStep);
 
         // Store the currently visible fragment depending on the orientation
-        if(mTwoCols){
+        if (mTwoCols) {
 
             String fragmentTag = mFragmentManager.findFragmentById(R.id.container_details).getTag();
-            Log.i(Constants.LOG_TAG, "fragemnt tag:" + fragmentTag );
+            Log.i(Constants.LOG_TAG, "fragemnt tag:" + fragmentTag);
             outState.putString(Constants.STATE_INFO_DETAILS_FRAGMENT, fragmentTag);
-        }else{
+        } else {
             String fragmentTag = mFragmentManager.findFragmentById(R.id.container_master).getTag();
-            Log.i(Constants.LOG_TAG, "fragemnt tag:" + fragmentTag );
+            Log.i(Constants.LOG_TAG, "fragemnt tag:" + fragmentTag);
             outState.putString(Constants.STATE_INFO_DETAILS_FRAGMENT, fragmentTag);
         }
     }

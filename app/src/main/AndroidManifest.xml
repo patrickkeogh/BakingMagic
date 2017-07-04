@@ -26,16 +26,31 @@
         <provider
             android:name=".provider.Provider_BakingMagic"
             android:authorities="com.programming.kantech.bakingmagic.app"
-            android:exported="false" />
+            android:exported="true" />
 
         <activity
             android:name=".views.activities.Activity_Details"
             android:launchMode="singleTop"
             android:parentActivityName=".views.activities.Activity_Main">
             <meta-data
-                android:name="andriod.support.PARENT_ACTIVITY"
-                android:value=".Activity_Main" />
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".views.activities.Activity_Main" />
         </activity>
+
+        <receiver android:name=".views.widget.WidgetProvider_BakingMagic">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/ingredients_widget_info" />
+        </receiver>
+
+        <service
+            android:name=".views.widget.WidgetService_BakingMagic"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
+
 
     </application>
 
