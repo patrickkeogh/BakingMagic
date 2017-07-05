@@ -12,13 +12,14 @@ import com.programming.kantech.bakingmagic.app.utils.Constants;
 
 /**
  * Created by patrick on 2017-06-24.
+ *
  */
 
 public class Contract_BakingMagic {
 
     // Use CONTENT_AUTHORITY to create the base of all URI's which apps will use to contact
     // the content provider.
-    public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + Constants.CONTENT_AUTHORITY);
+    private static final Uri BASE_CONTENT_URI = Uri.parse("content://" + Constants.CONTENT_AUTHORITY);
 
     // Possible paths (appended to base content URI for possible URI's)
     public static final String PATH_RECIPES = RecipeEntry.TABLE_NAME;
@@ -44,7 +45,7 @@ public class Contract_BakingMagic {
         /**
          * Return a Uri that points to the row containing a given id.
          *
-         * @param id
+         * @param id id of the step
          * @return Uri
          */
         public static Uri buildStepUri(Long id) {
@@ -54,7 +55,7 @@ public class Contract_BakingMagic {
         /**
          * Create an Ingredient object with the data from a cursor.
          *
-         * @param cursor
+         * @param cursor cursor containing the ingredient object
          * @return Step
          */
         public static Step getStepFromCursor(Cursor cursor) {
@@ -93,7 +94,7 @@ public class Contract_BakingMagic {
         /**
          * Return a Uri that points to the row containing a given id.
          *
-         * @param id
+         * @param id id of the ingredient
          * @return Uri
          */
         public static Uri buildIngredientUri(Long id) {
@@ -103,7 +104,7 @@ public class Contract_BakingMagic {
         /**
          * Create an Ingredient object with the data from a cursor.
          *
-         * @param cursor
+         * @param cursor cursor containing the ingredient object
          * @return Ingredient
          */
         public static Ingredient getIngredientFromCursor(Cursor cursor) {
@@ -138,7 +139,7 @@ public class Contract_BakingMagic {
         /**
          * Return a Uri that points to the row containing a given id.
          *
-         * @param id
+         * @param id recipe id
          * @return Uri
          */
         public static Uri buildRecipeUri(Long id) {
@@ -148,7 +149,7 @@ public class Contract_BakingMagic {
         /**
          * Create a Movie object with the data from a cursor.
          *
-         * @param cursor
+         * @param cursor A cursor containing the movie object
          * @return Movie
          */
         public static Recipe getRecipeFromCursor(Cursor cursor) {

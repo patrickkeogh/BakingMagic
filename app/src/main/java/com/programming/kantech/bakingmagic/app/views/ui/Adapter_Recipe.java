@@ -16,6 +16,7 @@ import java.util.List;
 
 /**
  * Created by patrick keogh on 2017-06-24.
+ *
  */
 
 public class Adapter_Recipe extends RecyclerView.Adapter<Adapter_Recipe.ViewHolder_Recipes> {
@@ -56,7 +57,7 @@ public class Adapter_Recipe extends RecyclerView.Adapter<Adapter_Recipe.ViewHold
         return mRecipes.size();
     }
 
-    public Recipe getItem(int position) {
+    private Recipe getItem(int position) {
         if (mRecipes == null) return null;
         return mRecipes.get(position);
     }
@@ -66,9 +67,9 @@ public class Adapter_Recipe extends RecyclerView.Adapter<Adapter_Recipe.ViewHold
 
     class ViewHolder_Recipes extends RecyclerView.ViewHolder implements View.OnClickListener{
 
-        public TextView tv_name;
+        TextView tv_name;
 
-        public ViewHolder_Recipes(View itemView) {
+        ViewHolder_Recipes(View itemView) {
             super(itemView);
             itemView.setOnClickListener(this);
             tv_name = (TextView)itemView.findViewById(R.id.tv_recipe_name);

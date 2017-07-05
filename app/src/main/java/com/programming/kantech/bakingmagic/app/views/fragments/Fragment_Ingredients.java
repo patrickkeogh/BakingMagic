@@ -16,16 +16,13 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
 import com.programming.kantech.bakingmagic.app.R;
-import com.programming.kantech.bakingmagic.app.data.model.pojo.Ingredient;
 import com.programming.kantech.bakingmagic.app.provider.Contract_BakingMagic;
 import com.programming.kantech.bakingmagic.app.utils.Constants;
 import com.programming.kantech.bakingmagic.app.views.ui.Adapter_Details_Ingredients;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Created by patrick keogh on 2017-06-24.
+ *
  */
 
 public class Fragment_Ingredients extends Fragment implements  LoaderManager.LoaderCallbacks<Cursor>,
@@ -33,7 +30,6 @@ public class Fragment_Ingredients extends Fragment implements  LoaderManager.Loa
 
     // Variables to store the id of the recipe that this fragment displays the ingredients for
     private int mRecipeId;
-    private String mRecipeName;
 
     private int mPosition = RecyclerView.NO_POSITION;
 

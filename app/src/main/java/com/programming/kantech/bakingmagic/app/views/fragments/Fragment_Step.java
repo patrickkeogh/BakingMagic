@@ -31,13 +31,13 @@ import com.programming.kantech.bakingmagic.app.R;
 import com.programming.kantech.bakingmagic.app.data.model.pojo.Step;
 import com.programming.kantech.bakingmagic.app.provider.Contract_BakingMagic;
 import com.programming.kantech.bakingmagic.app.utils.Constants;
-import com.programming.kantech.bakingmagic.app.utils.Utils_General;
 import com.squareup.picasso.Picasso;
 
 import java.lang.ref.WeakReference;
 
 /**
  * Created by patrick keogh on 2017-06-24.
+ *
  */
 
 public class Fragment_Step extends Fragment {
@@ -49,7 +49,6 @@ public class Fragment_Step extends Fragment {
 
     private TextView mPreviousStep;
     private TextView mNextStep;
-    private ImageView mImageView;
 
     // Define a new interface StepNavClickListener that triggers a callback in the host activity
     StepNavClickListener mCallback;
@@ -89,7 +88,7 @@ public class Fragment_Step extends Fragment {
 
         // Initialize the player view and imageor the image view.
         mPlayerView = (SimpleExoPlayerView) rootView.findViewById(R.id.playerView);
-        mImageView = (ImageView) rootView.findViewById(R.id.iv_imageView);
+        ImageView mImageView = (ImageView) rootView.findViewById(R.id.iv_imageView);
 
         TextView tv_title = (TextView) rootView.findViewById(R.id.tv_step_title);
         TextView tv_description = (TextView) rootView.findViewById(R.id.tv_step_description);

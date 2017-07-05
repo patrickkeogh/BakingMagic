@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     card_view:cardUseCompatPadding="true"
     card_view:cardCornerRadius="0dp"
-    android:layout_marginBottom="8dp">
+    android:layout_marginBottom="@dimen/padding_8dp">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -18,8 +18,8 @@
             android:layout_height="wrap_content"
             android:textColor="@color/colorAccent"
             android:gravity="center"
-            android:paddingBottom="8dp"
-            android:paddingTop="8dp"
+            android:paddingBottom="@dimen/padding_8dp"
+            android:paddingTop="@dimen/padding_8dp"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
             android:background="@color/colorPrimaryDark"/>
 

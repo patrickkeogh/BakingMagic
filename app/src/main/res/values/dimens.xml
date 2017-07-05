@@ -10,4 +10,8 @@ Refer to App Widget Documentation for margin information
 http://developer.android.com/guide/topics/appwidgets/index.html#CreatingLayout
     -->
     <dimen name="widget_margin">8dp</dimen>
+    <dimen name="divider_width">1dp</dimen>
+    <dimen name="app_bar_height">250dp</dimen>
+    <dimen name="progress_bar_height_width">42dp</dimen>
+    <dimen name="margin_8dp">8dp</dimen>
 </resources>

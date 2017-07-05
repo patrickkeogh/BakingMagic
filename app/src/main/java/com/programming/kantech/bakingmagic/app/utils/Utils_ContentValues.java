@@ -8,7 +8,8 @@ import com.programming.kantech.bakingmagic.app.data.model.pojo.Step;
 import com.programming.kantech.bakingmagic.app.provider.Contract_BakingMagic;
 
 /**
- * Created by patrick keogh on 2017-06-23.
+ *
+ *
  */
 
 public class Utils_ContentValues {

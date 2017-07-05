@@ -4,21 +4,18 @@ import android.content.Context;
 import android.database.Cursor;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.programming.kantech.bakingmagic.app.R;
-import com.programming.kantech.bakingmagic.app.data.model.pojo.Ingredient;
 import com.programming.kantech.bakingmagic.app.data.model.pojo.Step;
 import com.programming.kantech.bakingmagic.app.provider.Contract_BakingMagic;
-import com.programming.kantech.bakingmagic.app.utils.Constants;
-import com.programming.kantech.bakingmagic.app.utils.Utils_General;
 
 /**
- * Created by patri on 2017-06-26.
+ * Created by patrick keogh on 2017-06-26.
+ *
  */
 
 public class Adapter_Details_Steps extends RecyclerView.Adapter<Adapter_Details_Steps.ViewHolder_Details> {
@@ -68,7 +65,9 @@ public class Adapter_Details_Steps extends RecyclerView.Adapter<Adapter_Details_
         /* Read date from the cursor */
         Step step = Contract_BakingMagic.StepsEntry.getStepFromCursor(mCursor);
 
-        holder.tv_details.setText("Step: " + step.getShortDescription());
+        String stepText = "Step: " + step.getShortDescription();
+
+        holder.tv_details.setText(stepText);
 
 
     }

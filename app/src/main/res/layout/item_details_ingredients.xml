@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:background="@color/colorLightGrey"
     android:layout_height="wrap_content"
+    android:background="@color/colorLightGrey"
     android:orientation="vertical">
 
     <LinearLayout
@@ -21,10 +20,8 @@
             android:paddingRight="@dimen/padding_8dp"
             android:paddingStart="@dimen/padding_8dp"
             android:paddingTop="@dimen/padding_8dp"
-            android:textColor="@color/colorPrimaryDark"
-
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            tools:text="TBLSP" />
+            android:textColor="@color/colorPrimaryDark" />
 
         <TextView
             android:id="@+id/tv_details_ingredients_name"
@@ -36,15 +33,14 @@
             android:paddingRight="@dimen/padding_8dp"
             android:paddingStart="@dimen/padding_8dp"
             android:paddingTop="@dimen/padding_8dp"
-            android:textColor="@color/colorPrimaryDark"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            tools:text="Graham Cracker crumbs" />
+            android:textColor="@color/colorPrimaryDark" />
 
     </LinearLayout>
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="1dp"
+        android:layout_height="@dimen/divider_width"
         android:background="@color/colorPrimaryLight" />
 
 </LinearLayout>

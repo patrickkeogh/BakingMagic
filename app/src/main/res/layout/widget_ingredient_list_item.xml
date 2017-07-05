@@ -8,7 +8,6 @@
 
     <TextView
         android:id="@+id/widget_tv_measurement"
-        android:text="1 cup"
         android:textColor="@color/colorPrimaryDark"
         android:padding="@dimen/padding_8dp"
         android:textAppearance="@style/TextAppearance.AppCompat.Small"
@@ -17,7 +16,6 @@
 
     <TextView
         android:id="@+id/widget_tv_ingredient"
-        android:text="eggs"
         android:textColor="@color/colorPrimaryDark"
         android:padding="@dimen/padding_8dp"
         android:textAppearance="@style/TextAppearance.AppCompat.Small"

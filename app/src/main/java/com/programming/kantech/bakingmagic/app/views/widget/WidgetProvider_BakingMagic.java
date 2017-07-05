@@ -23,9 +23,6 @@ import com.programming.kantech.bakingmagic.app.utils.Utils_Preferences;
 import com.programming.kantech.bakingmagic.app.views.activities.Activity_Details;
 import com.programming.kantech.bakingmagic.app.views.activities.Activity_Main;
 
-import java.util.Iterator;
-import java.util.Set;
-
 /**
  * Implementation of App Widget functionality.
  */

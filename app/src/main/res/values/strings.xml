@@ -17,4 +17,5 @@
     <string name="toast_fav_new">This recipe is now your favorite.</string>
     <string name="toast_fav_old">You no longer have a favorite recipe.</string>
     <string name="widget_title_ingredients">Ingredients Required For</string>
+    <string name="main_screen_image">Main Screen Image</string>
 </resources>

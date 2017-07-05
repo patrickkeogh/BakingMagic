@@ -3,15 +3,13 @@ package com.programming.kantech.bakingmagic.app.utils;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.util.DisplayMetrics;
 import android.widget.Toast;
 
 import java.text.DecimalFormat;
 
 /**
  * Created by patrick keogh on 2017-06-23.
- * @class Utils_General
- * @brief Helper methods shared by various Activities.
+ *
  */
 
 public class Utils_General {
