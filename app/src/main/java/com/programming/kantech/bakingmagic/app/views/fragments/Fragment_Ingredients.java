@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -73,6 +74,8 @@ public class Fragment_Ingredients extends Fragment implements  LoaderManager.Loa
 
         // Get a reference to the RecyclerView in the fragment_ingredients xml layout file
         rv_ingredients = (RecyclerView) rootView.findViewById(R.id.rv_ingredients);
+        rv_ingredients.addItemDecoration(new DividerItemDecoration(getActivity(),
+                DividerItemDecoration.HORIZONTAL));
 
         mLoadingIndicator = (ProgressBar) rootView.findViewById(R.id.pb_loading_indicator);
 

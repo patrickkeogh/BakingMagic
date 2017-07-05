@@ -13,13 +13,18 @@ import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import com.programming.kantech.bakingmagic.app.R;
 import com.programming.kantech.bakingmagic.app.data.model.pojo.Recipe;
 import com.programming.kantech.bakingmagic.app.data.model.pojo.Step;
 import com.programming.kantech.bakingmagic.app.provider.Contract_BakingMagic;
+import com.programming.kantech.bakingmagic.app.services.Service_WidgetUpdate;
 import com.programming.kantech.bakingmagic.app.utils.Constants;
+import com.programming.kantech.bakingmagic.app.utils.Utils_General;
+import com.programming.kantech.bakingmagic.app.utils.Utils_Preferences;
 import com.programming.kantech.bakingmagic.app.views.fragments.Fragment_DetailsList;
 import com.programming.kantech.bakingmagic.app.views.fragments.Fragment_Ingredients;
 import com.programming.kantech.bakingmagic.app.views.fragments.Fragment_Step;
@@ -36,6 +41,8 @@ public class Activity_Details extends AppCompatActivity implements Fragment_Step
     private boolean mTwoCols;
     private Recipe mRecipe;
     private static Step mStep;
+
+    private MenuItem menu_fav;
 
     private FragmentManager mFragmentManager;
     private Fragment mFragment;
@@ -71,8 +78,6 @@ public class Activity_Details extends AppCompatActivity implements Fragment_Step
             }
 
         } else {
-            Intent intent = getIntent();
-
             Log.i(Constants.LOG_TAG, "Activity_Details savedInstanceState is null, get data from intent");
             mRecipe = getIntent().getParcelableExtra(Constants.EXTRA_RECIPE);
         }
@@ -144,6 +149,57 @@ public class Activity_Details extends AppCompatActivity implements Fragment_Step
         } else {
             super.onBackPressed();
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_details, menu);
+
+        // Change the image depnding on if this recipe
+        // is already the users favorite or not
+
+        int fav_id = Utils_Preferences.getFavId(this);
+
+        menu_fav = menu.getItem(0);
+
+        if(mRecipe.getId() == fav_id){
+            menu_fav.setIcon(R.drawable.ic_favorite_accent_24dp);
+        }else {
+            menu_fav.setIcon(R.drawable.ic_favorite_border_accent_24dp);
+        }
+
+        return true; //true means been handled
+
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.action_favorite) {
+
+            int fav_id = Utils_Preferences.getFavId(this);
+
+            if(fav_id == mRecipe.getId()){
+                Utils_Preferences.saveFavId(this, 0);
+                menu_fav.setIcon(R.drawable.ic_favorite_border_accent_24dp);
+                Utils_General.showToast(this, getString(R.string.toast_fav_old));
+
+                // Update the home screen widget to show the ingredients for the new favorite recipe
+                Service_WidgetUpdate.startActionUpdateBakingWidget(this);
+            }else{
+                Utils_Preferences.saveFavId(this, mRecipe.getId());
+                menu_fav.setIcon(R.drawable.ic_favorite_accent_24dp);
+                Utils_General.showToast(this, getString(R.string.toast_fav_new));
+
+                // Update the home screen widget to show the ingredients for the new favorite recipe
+                Service_WidgetUpdate.startActionUpdateBakingWidget(this);
+            }
+        }
+
+        return super.onOptionsItemSelected(item); // let app handle it
     }
 
 //    @Override
@@ -303,22 +359,18 @@ public class Activity_Details extends AppCompatActivity implements Fragment_Step
         if (mTwoCols) {
 
             String fragmentTag = mFragmentManager.findFragmentById(R.id.container_details).getTag();
-            Log.i(Constants.LOG_TAG, "fragemnt tag:" + fragmentTag);
+            //Log.i(Constants.LOG_TAG, "fragemnt tag:" + fragmentTag);
             outState.putString(Constants.STATE_INFO_DETAILS_FRAGMENT, fragmentTag);
         } else {
             String fragmentTag = mFragmentManager.findFragmentById(R.id.container_master).getTag();
-            Log.i(Constants.LOG_TAG, "fragemnt tag:" + fragmentTag);
+            //Log.i(Constants.LOG_TAG, "fragemnt tag:" + fragmentTag);
             outState.putString(Constants.STATE_INFO_DETAILS_FRAGMENT, fragmentTag);
         }
     }
 
     @Override
     public void onStepSelected(Step step) {
-
-        //Log.i(Constants.LOG_TAG, "onStepSelected Activity_Details Step:" + step.toString());
-
         mStep = step;
-
         replaceDetailsFragmentWithStepFrag();
     }
 

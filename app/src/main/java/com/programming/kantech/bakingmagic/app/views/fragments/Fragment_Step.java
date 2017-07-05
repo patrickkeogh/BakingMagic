@@ -114,7 +114,7 @@ public class Fragment_Step extends Fragment {
 
 
             if (mStep.getVideoURL().length() != 0) {
-                Utils_General.showToast(getActivity(), "No Image");
+                //Utils_General.showToast(getActivity(), "No Image");
                 // Load the exo player and hide the image view
                 mImageView.setVisibility(View.GONE);
 
@@ -122,7 +122,7 @@ public class Fragment_Step extends Fragment {
                 initializePlayer(Uri.parse(mStep.getVideoURL()));
 
             } else if (mStep.getThumbnailURL().length() != 0) {
-                Utils_General.showToast(getActivity(), "No video");
+                //Utils_General.showToast(getActivity(), "No video");
 
                 mPlayerView.setVisibility(View.GONE);
 
@@ -133,7 +133,7 @@ public class Fragment_Step extends Fragment {
                         .into(mImageView);
             }else{
 
-                Utils_General.showToast(getActivity(), "No video or Image");
+                //Utils_General.showToast(getActivity(), "No video or Image");
 
                 // Hide both Image and ExoPlayer
                 mPlayerView.setVisibility(View.GONE);
@@ -229,8 +229,6 @@ public class Fragment_Step extends Fragment {
                     mFragment.get().setVisibilityPreviousStep(View.VISIBLE);
                 }
             }
-
-
         }
     }
 

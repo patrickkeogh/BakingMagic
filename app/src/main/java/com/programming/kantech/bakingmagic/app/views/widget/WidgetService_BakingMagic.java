@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Bundle;
 import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
@@ -12,6 +13,8 @@ import com.programming.kantech.bakingmagic.app.R;
 import com.programming.kantech.bakingmagic.app.data.model.pojo.Ingredient;
 import com.programming.kantech.bakingmagic.app.provider.Contract_BakingMagic;
 import com.programming.kantech.bakingmagic.app.utils.Constants;
+import com.programming.kantech.bakingmagic.app.utils.Utils_General;
+import com.programming.kantech.bakingmagic.app.utils.Utils_Preferences;
 
 /**
  * Created by patrick keogh on 2017-07-04.
@@ -50,7 +53,7 @@ class WidgetRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory 
         Uri uri = Contract_BakingMagic.IngredientEntry.CONTENT_URI;
 
         String selection = Contract_BakingMagic.IngredientEntry.COLUMN_RECIPE_ID + "=?";
-        String[] selectionArgs = {"1"};
+        String[] selectionArgs = {"" + Utils_Preferences.getFavId(mContext)};
 
         if (mCursor != null) mCursor.close();
         mCursor = mContext.getContentResolver().query(
@@ -60,9 +63,6 @@ class WidgetRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory 
                 selectionArgs,
                 null
         );
-
-
-
     }
 
     @Override
@@ -87,16 +87,23 @@ class WidgetRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory 
         //Log.i(Constants.LOG_TAG, "getViewAt() called in WidgetRemoteViewsFactory");
 
         if (mCursor == null || mCursor.getCount() == 0) return null;
+
         mCursor.moveToPosition(position);
 
         Ingredient ingredient = Contract_BakingMagic.IngredientEntry.getIngredientFromCursor(mCursor);
 
         RemoteViews views = new RemoteViews(mContext.getPackageName(), R.layout.widget_ingredient_list_item);
 
-        views.setTextViewText(R.id.widget_tv_measurement, ingredient.getMeasure());
+        views.setTextViewText(R.id.widget_tv_measurement, Utils_General.getFormattedMeasurement(mContext, ingredient.getQuantity(), ingredient.getMeasure()));
         views.setTextViewText(R.id.widget_tv_ingredient, ingredient.getIngredient());
 
-
+        // Fill in the onClick PendingIntent Template using the specific plant Id for each item individually
+        // Test code for list item clicks - not need for this project
+//        Bundle extras = new Bundle();
+//        extras.putString(Constants.EXTRA_RECIPE_NAME, ingredient.getIngredient());
+//        Intent fillInIntent = new Intent();
+//        fillInIntent.putExtras(extras);
+//        views.setOnClickFillInIntent(R.id.widget_list_item_layout, fillInIntent);
 
         return views;
     }
@@ -108,7 +115,7 @@ class WidgetRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory 
 
     @Override
     public int getViewTypeCount() {
-        return 1; // Treat all items in the GridView the same
+        return 1; // Treat all items in the ListView the same
     }
 
 

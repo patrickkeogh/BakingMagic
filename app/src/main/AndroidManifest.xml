@@ -51,6 +51,8 @@
             android:name=".views.widget.WidgetService_BakingMagic"
             android:permission="android.permission.BIND_REMOTEVIEWS" />
 
+        <service android:name=".services.Service_WidgetUpdate" />
+
 
     </application>
 

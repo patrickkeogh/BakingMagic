@@ -6,6 +6,8 @@ import android.net.NetworkInfo;
 import android.util.DisplayMetrics;
 import android.widget.Toast;
 
+import java.text.DecimalFormat;
+
 /**
  * Created by patrick keogh on 2017-06-23.
  * @class Utils_General
@@ -14,11 +16,19 @@ import android.widget.Toast;
 
 public class Utils_General {
 
-    public static int calculateNoOfColumns(Context context) {
-        DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
-        float dpWidth = displayMetrics.widthPixels / displayMetrics.density;
-        int noOfColumns = (int) (dpWidth / 180);
-        return noOfColumns;
+    public static String getFormattedMeasurement(Context context, Double qty, String uom){
+
+        String formatted_string = "";
+
+        DecimalFormat format = new DecimalFormat();
+        format.setDecimalSeparatorAlwaysShown(false);
+
+        formatted_string += format.format(qty);
+        formatted_string += " " + uom.toLowerCase();
+
+
+
+        return formatted_string;
     }
 
     /**

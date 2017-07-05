@@ -14,6 +14,7 @@ import com.programming.kantech.bakingmagic.app.R;
 import com.programming.kantech.bakingmagic.app.data.model.pojo.Ingredient;
 import com.programming.kantech.bakingmagic.app.provider.Contract_BakingMagic;
 import com.programming.kantech.bakingmagic.app.utils.Constants;
+import com.programming.kantech.bakingmagic.app.utils.Utils_General;
 
 import java.text.DecimalFormat;
 
@@ -72,8 +73,8 @@ public class Adapter_Details_Ingredients extends RecyclerView.Adapter<Adapter_De
         format.setDecimalSeparatorAlwaysShown(false);
 
         holder.tv_details_ingredients_name.setText(ingredient.getIngredient());
-        holder.tv_details_ingredients_qty.setText(format.format(ingredient.getQuantity()));
-        holder.tv_details_ingredients_uom.setText(ingredient.getMeasure());
+        holder.tv_details_ingredients_uom.setText(Utils_General.getFormattedMeasurement(mContext,
+                ingredient.getQuantity(), ingredient.getMeasure()));
 
     }
 
@@ -105,14 +106,12 @@ public class Adapter_Details_Ingredients extends RecyclerView.Adapter<Adapter_De
     class ViewHolder_Details extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         final TextView tv_details_ingredients_name;
-        final TextView tv_details_ingredients_qty;
         final TextView tv_details_ingredients_uom;
 
         public ViewHolder_Details(View view) {
             super(view);
 
             tv_details_ingredients_name = (TextView) view.findViewById(R.id.tv_details_ingredients_name);
-            tv_details_ingredients_qty = (TextView) view.findViewById(R.id.tv_details_ingredients_qty);
             tv_details_ingredients_uom = (TextView) view.findViewById(R.id.tv_details_ingredients_uom);
         }
 

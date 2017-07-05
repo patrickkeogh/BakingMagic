@@ -131,7 +131,7 @@ public class Recipe implements Parcelable {
         this.name = in.readString();
 //        this.ingredients = in.createTypedArrayList(Ingredient.CREATOR);
 //        this.steps = new ArrayList<Step>();
-        in.readList(this.steps, Step.class.getClassLoader());
+//        in.readList(this.steps, Step.class.getClassLoader());
         this.servings = (Integer) in.readValue(Integer.class.getClassLoader());
         this.image = in.readString();
     }

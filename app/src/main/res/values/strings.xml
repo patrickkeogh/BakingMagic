@@ -11,5 +11,10 @@
     <string name="step_image">Step Image</string>
     <string name="appwidget_text">Baking Magic</string>
     <string name="add_widget">Add widget</string>
-    <string name="empty_view_text">No ingredients found...</string>
+    <string name="empty_view_text">No favorite recipe found...</string>
+    <string name="action_favorite">Favorite</string>
+    <string name="pref_fav_recipe_id">pref recipe id</string>
+    <string name="toast_fav_new">This recipe is now your favorite.</string>
+    <string name="toast_fav_old">You no longer have a favorite recipe.</string>
+    <string name="widget_title_ingredients">Ingredients Required For</string>
 </resources>

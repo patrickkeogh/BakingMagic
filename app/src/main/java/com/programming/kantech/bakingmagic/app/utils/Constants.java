@@ -28,23 +28,32 @@ public class Constants {
     /**
      * The Constants used for data added as extras to intents
      */
-    public static final String EXTRA_RECIPE = "extra_recipe";
-    public static final String EXTRA_STEP = "extra_step";
-    public static final String EXTRA_RECIPE_ID = "extra_recipe_id";
-    public static final String EXTRA_RECIPE_NAME = "extra_recipe_name";
-    public static final String EXTRA_STEP_COUNT = "extra_step_count";
-
-    public static final String TAG_FRAGMENT_INGREDIENTS = "tag_frag_ingredients";
-    public static final String TAG_FRAGMENT_STEP = "tag_frag_step";
-    public static final String TAG_FRAGMENT_MASTER = "tag_frag_masters";
+    public static final String EXTRA_RECIPE = "com.programming.kantech.bakingmagic.app.extra.recipe";
+    public static final String EXTRA_STEP = "com.programming.kantech.bakingmagic.app.extra.step";
+    public static final String EXTRA_RECIPE_ID = "com.programming.kantech.bakingmagic.app.extra.recipe_id";
+    public static final String EXTRA_RECIPE_NAME = "com.programming.kantech.bakingmagic.app.extra.recipe_name";
 
     /**
-     * The Constants used for data added to savedInstanceState     */
+     * The Constants used for fragment tags
+     */
+    public static final String TAG_FRAGMENT_INGREDIENTS = "com.programming.kantech.bakingmagic.app.fragment.tag.ingredients";
+    public static final String TAG_FRAGMENT_STEP = "com.programming.kantech.bakingmagic.app.fragment.tag.step";
+    public static final String TAG_FRAGMENT_MASTER = "com.programming.kantech.bakingmagic.app.fragment.tag.master";
 
-    public static final String STATE_INFO_RECIPE_ID = "state_info_recipe_id";
-    public static final String STATE_INFO_RECIPE = "state_info_recipe";
-    public static final String STATE_INFO_STEP = "state_info_step";
-    public static final String STATE_INFO_DETAILS_FRAGMENT = "state_info_details_fragment";
+    /**
+     * The Constants used for service actions
+     */
+    public static final String ACTION_UPDATE_BAKING_WIDGET =
+            "com.programming.kantech.bakingmagic.app.action.update_widget";
+
+    /**
+     * The Constants used for data added to savedInstanceState
+     */
+
+    public static final String STATE_INFO_RECIPE_ID = "com.programming.kantech.bakingmagic.app.state.recipe_id";
+    public static final String STATE_INFO_RECIPE = "com.programming.kantech.bakingmagic.app.state.recipe";
+    public static final String STATE_INFO_STEP = "com.programming.kantech.bakingmagic.app.state.step";
+    public static final String STATE_INFO_DETAILS_FRAGMENT = "com.programming.kantech.bakingmagic.app.state.details_fragment";
 
 
     // The loader's unique id. Loader ids are specific to the Activity or

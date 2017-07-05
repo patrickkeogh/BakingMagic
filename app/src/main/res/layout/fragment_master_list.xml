@@ -9,7 +9,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="@color/colorPrimaryDark"
-        android:background="@color/colorPrimaryLight"
         android:text="@string/details_title_ingredients"
         android:paddingBottom="@dimen/padding_8dp"
         android:paddingLeft="@dimen/padding_8dp"
@@ -22,13 +21,13 @@
     <View
         android:layout_width="fill_parent"
         android:layout_height="1dp"
-        android:background="@color/colorPrimaryDark" />
+        android:background="@color/colorPrimaryLight" />
 
     <android.support.v7.widget.RecyclerView
-        android:background="@color/colorAccent"
+
         android:id="@+id/rv_details_list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="wrap_content" />
 
     <!-- A progress bar that will be shown to users to indicate that weather data is loading -->
     <ProgressBar

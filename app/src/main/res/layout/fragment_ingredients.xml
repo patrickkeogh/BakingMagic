@@ -6,20 +6,20 @@
     android:orientation="vertical">
 
     <TextView
-        android:text="@string/details_title_ingredients"
-        android:background="@color/colorAccent"
-        android:textColor="@color/colorPrimaryDark"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        android:padding="@dimen/padding_8dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:background="@color/colorAccent"
+        android:gravity="center"
+        android:padding="@dimen/padding_8dp"
+        android:text="@string/details_title_ingredients"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textColor="@color/colorPrimaryDark" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_ingredients"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <!-- A progress bar that will be shown to users to indicate that weather data is loading -->
     <ProgressBar
         android:id="@+id/pb_loading_indicator"
         android:layout_width="42dp"

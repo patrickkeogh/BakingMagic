@@ -33,7 +33,7 @@
         android:contentDescription="@string/appwidget_text"
         android:gravity="center"
         android:padding="@dimen/padding_8dp"
-        android:text="Ingredients Required For"
+        android:text="@string/widget_title_ingredients"
         android:textAppearance="@style/TextAppearance.AppCompat.Small"
         android:textColor="@color/colorAccent"
         android:textStyle="bold|italic" />
@@ -49,7 +49,6 @@
         android:contentDescription="@string/appwidget_text"
         android:gravity="center"
         android:padding="@dimen/padding_8dp"
-        android:text="Brownies"
         android:textAppearance="@style/TextAppearance.AppCompat.Small"
         android:textColor="@color/colorAccent"
         android:textStyle="bold|italic" />
@@ -68,6 +67,8 @@
 
         <ListView
             android:id="@+id/widget_list_view_ingredients"
+            android:divider="@drawable/divider"
+            android:dividerHeight="1dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
@@ -83,7 +84,7 @@
                 android:layout_centerInParent="true"
                 android:text="@string/empty_view_text"
                 android:textAlignment="center"
-                android:textColor="#ffffff"
+                android:textColor="@color/colorBlack"
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
