@@ -18,16 +18,6 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/exo_player_height" />
 
-    <ImageView
-        android:id="@+id/iv_imageView"
-        android:scaleType="fitXY"
-        android:contentDescription="@string/step_image"
-        android:adjustViewBounds="true"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/exo_player_height" />
-
-
-
     <LinearLayout
         android:id="@+id/layout_for_step_navigation"
         android:layout_width="match_parent"

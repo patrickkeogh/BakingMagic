@@ -15,6 +15,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
 
 import com.programming.kantech.bakingmagic.app.R;
 import com.programming.kantech.bakingmagic.app.data.model.pojo.Recipe;
@@ -23,6 +24,7 @@ import com.programming.kantech.bakingmagic.app.data.retrofit.ApiInterface;
 import com.programming.kantech.bakingmagic.app.provider.Contract_BakingMagic;
 import com.programming.kantech.bakingmagic.app.tasks.Task_GetRecipes;
 import com.programming.kantech.bakingmagic.app.utils.Constants;
+import com.programming.kantech.bakingmagic.app.utils.Utils_General;
 import com.programming.kantech.bakingmagic.app.views.ui.Adapter_Recipe;
 
 import java.lang.ref.WeakReference;
@@ -96,13 +98,22 @@ public class Activity_Main extends AppCompatActivity implements LoaderManager.Lo
             }
         });
 
-        ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
+        if(!Utils_General.isNetworkAvailable(this)){
 
-        Call<List<Recipe>> call = apiService.getRecipes();
+            Utils_General.showToast(this, getString(R.string.error_no_internet));
 
-        WeakReference<Context> mContext = new WeakReference<Context>(this);
+        }else{
 
-        new Task_GetRecipes(mContext).execute(call);
+            ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
+
+            Call<List<Recipe>> call = apiService.getRecipes();
+
+            WeakReference<Context> mContext = new WeakReference<Context>(this);
+
+            new Task_GetRecipes(mContext).execute(call);
+        }
+
+
 
         GridLayoutManager lLayout = new GridLayoutManager(Activity_Main.this, getResources().getInteger(R.integer.numOfCols));
 
@@ -190,6 +201,9 @@ public class Activity_Main extends AppCompatActivity implements LoaderManager.Lo
      */
     @Override
     public void onClick(Recipe recipe) {
+
+        View parentLayout = findViewById(R.id.coordinator_layout);
+        Utils_General.showSnackBar(parentLayout, "Clicked");
 
         //Log.i(Constants.LOG_TAG, "Recipe clicked:" + recipe.getName());
 

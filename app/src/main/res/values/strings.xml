@@ -18,4 +18,9 @@
     <string name="toast_fav_old">You no longer have a favorite recipe.</string>
     <string name="widget_title_ingredients">Ingredients Required For</string>
     <string name="main_screen_image">Main Screen Image</string>
+
+    <string name="title_activity__full_screen">Activity_FullScreen</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="error_no_internet">Could not retrieve recipes - no internet.</string>
 </resources>

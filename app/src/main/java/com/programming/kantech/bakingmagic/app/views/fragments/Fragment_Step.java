@@ -3,6 +3,7 @@ package com.programming.kantech.bakingmagic.app.views.fragments;
 import android.app.Activity;
 import android.content.AsyncQueryHandler;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -12,26 +13,16 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.android.exoplayer2.DefaultLoadControl;
-import com.google.android.exoplayer2.ExoPlayerFactory;
-import com.google.android.exoplayer2.LoadControl;
-import com.google.android.exoplayer2.SimpleExoPlayer;
-import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
-import com.google.android.exoplayer2.source.ExtractorMediaSource;
-import com.google.android.exoplayer2.source.MediaSource;
-import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
-import com.google.android.exoplayer2.trackselection.TrackSelector;
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
-import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
-import com.google.android.exoplayer2.util.Util;
 import com.programming.kantech.bakingmagic.app.R;
 import com.programming.kantech.bakingmagic.app.data.model.pojo.Step;
+import com.programming.kantech.bakingmagic.app.media.ExoPlayerVideoHandler;
 import com.programming.kantech.bakingmagic.app.provider.Contract_BakingMagic;
 import com.programming.kantech.bakingmagic.app.utils.Constants;
-import com.squareup.picasso.Picasso;
+import com.programming.kantech.bakingmagic.app.utils.Utils_General;
+import com.programming.kantech.bakingmagic.app.views.activities.Activity_FullScreenVideo;
 
 import java.lang.ref.WeakReference;
 
@@ -44,7 +35,7 @@ public class Fragment_Step extends Fragment {
 
     private Step mStep;
 
-    private SimpleExoPlayer mExoPlayer;
+    //private SimpleExoPlayer mExoPlayer;
     private SimpleExoPlayerView mPlayerView;
 
     private TextView mPreviousStep;
@@ -56,6 +47,7 @@ public class Fragment_Step extends Fragment {
     // StepNavClickListener interface, calls a method in the host activity depending on the nav button clicked
     public interface StepNavClickListener {
         void onNextStepSelected();
+
         void onPreviousStepSelected();
     }
 
@@ -83,12 +75,31 @@ public class Fragment_Step extends Fragment {
             mStep = args.getParcelable(Constants.EXTRA_STEP);
         }
 
+        if(!Utils_General.isNetworkAvailable(getContext())){
+            Utils_General.showToast(getContext(), getString(R.string.error_no_internet));
+
+        }
+
         // Inflate the step details fragment layout
         View rootView = inflater.inflate(R.layout.fragment_step_details, container, false);
 
         // Initialize the player view and imageor the image view.
         mPlayerView = (SimpleExoPlayerView) rootView.findViewById(R.id.playerView);
-        ImageView mImageView = (ImageView) rootView.findViewById(R.id.iv_imageView);
+
+        if (rootView.findViewById(R.id.exo_fullscreen_button) != null) {
+
+            rootView.findViewById(R.id.exo_fullscreen_button)
+                    .setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent(getContext(), Activity_FullScreenVideo.class);
+                            intent.putExtra(Constants.EXTRA_STEP, mStep);
+                            getContext().startActivity(intent);
+                        }
+                    });
+
+        }
+
 
         TextView tv_title = (TextView) rootView.findViewById(R.id.tv_step_title);
         TextView tv_description = (TextView) rootView.findViewById(R.id.tv_step_description);
@@ -110,34 +121,6 @@ public class Fragment_Step extends Fragment {
                 handler.startQuery(0, null, uri, null, selection, selectionArgs, null);
             }
 
-
-
-            if (mStep.getVideoURL().length() != 0) {
-                //Utils_General.showToast(getActivity(), "No Image");
-                // Load the exo player and hide the image view
-                mImageView.setVisibility(View.GONE);
-
-                // Initialize the player.
-                initializePlayer(Uri.parse(mStep.getVideoURL()));
-
-            } else if (mStep.getThumbnailURL().length() != 0) {
-                //Utils_General.showToast(getActivity(), "No video");
-
-                mPlayerView.setVisibility(View.GONE);
-
-                Picasso.with(getActivity())
-                        .load(mStep.getThumbnailURL())
-                        .placeholder(R.drawable.image)
-                        .error(R.drawable.image)
-                        .into(mImageView);
-            }else{
-
-                //Utils_General.showToast(getActivity(), "No video or Image");
-
-                // Hide both Image and ExoPlayer
-                mPlayerView.setVisibility(View.GONE);
-                mImageView.setVisibility(View.GONE);
-            }
         }
 
         // Determine if we have step navigation (only in portrait view)
@@ -180,6 +163,87 @@ public class Fragment_Step extends Fragment {
             throw new ClassCastException(context.toString()
                     + " must implement StepClickListener");
         }
+    }
+
+//    @Override
+//    public void onStart() {
+//        super.onStart();
+//        if (Util.SDK_INT > 23) {
+//            if (mStep.getVideoURL().length() != 0) {
+//                //Utils_General.showToast(getActivity(), "No Image");
+//                // Load the exo player and hide the image view
+//                mImageView.setVisibility(View.GONE);
+//                // Initialize the player.
+//                initializePlayer(Uri.parse(mStep.getVideoURL()));
+//
+//            } else if (mStep.getThumbnailURL().length() != 0) {
+//                //Utils_General.showToast(getActivity(), "No video");
+//
+//                mPlayerView.setVisibility(View.GONE);
+//
+//                Picasso.with(getActivity())
+//                        .load(mStep.getThumbnailURL())
+//                        .placeholder(R.drawable.image)
+//                        .error(R.drawable.image)
+//                        .into(mImageView);
+//            } else {
+//                // Hide both Image and ExoPlayer
+//                mPlayerView.setVisibility(View.GONE);
+//                mImageView.setVisibility(View.GONE);
+//            }
+//        }
+//    }
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (Utils_General.isNetworkAvailable(getContext())) {
+            if (mStep.getVideoURL().length() != 0) {
+
+                ExoPlayerVideoHandler.getInstance()
+                        .prepareExoPlayerForUri(getContext(),
+                                Uri.parse(mStep.getVideoURL()), mPlayerView);
+
+                ExoPlayerVideoHandler.getInstance().goToForeground();
+
+
+            } else {
+                // Hide both Image and ExoPlayer
+                mPlayerView.setVisibility(View.GONE);
+            }
+        } else {
+            Utils_General.showToast(getContext(), getString(R.string.error_no_internet));
+        }
+    }
+
+
+//    @Override
+//    public void onPause() {
+//        super.onPause();
+//        if (Util.SDK_INT <= 23) {
+//            releasePlayer();
+//        }
+//    }
+//
+//    @Override
+//    public void onStop() {
+//        super.onStop();
+//        if (Util.SDK_INT > 23) {
+//            releasePlayer();
+//        }
+//    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        ExoPlayerVideoHandler.getInstance().goToBackground();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        ExoPlayerVideoHandler.getInstance().releaseVideoPlayer();
     }
 
     /**
@@ -231,54 +295,53 @@ public class Fragment_Step extends Fragment {
         }
     }
 
-    /**
-     * Release the player when the fragment is destroyed.
-     */
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        releasePlayer();
-    }
+//    /**
+//     * Release the player when the fragment is destroyed.
+//     */
+//    @Override
+//    public void onDestroyView() {
+//        super.onDestroyView();
+//        releasePlayer();
+//    }
 
-    /**
-     * Initialize ExoPlayer.
-     *
-     * @param mediaUri The URI of the sample to play.
-     */
-    private void initializePlayer(Uri mediaUri) {
-
-        Log.i(Constants.LOG_TAG, "initialize player called()");
-
-        if (mExoPlayer == null) {
-            Log.i(Constants.LOG_TAG, "mExoPlayer == null");
-            // Create an instance of the ExoPlayer.
-            TrackSelector trackSelector = new DefaultTrackSelector();
-            LoadControl loadControl = new DefaultLoadControl();
-            mExoPlayer = ExoPlayerFactory.newSimpleInstance(getContext(), trackSelector, loadControl);
-            mPlayerView.setPlayer(mExoPlayer);
-
-            // Prepare the MediaSource.
-            String userAgent = Util.getUserAgent(getContext(), "BakingMagicApp");
-            MediaSource mediaSource = new ExtractorMediaSource(mediaUri, new DefaultDataSourceFactory(
-                    getContext(), userAgent), new DefaultExtractorsFactory(), null, null);
-            mExoPlayer.prepare(mediaSource);
-            mExoPlayer.setPlayWhenReady(true);
-        }
-    }
+//    /**
+//     * Initialize ExoPlayer.
+//     *
+//     * @param mediaUri The URI of the sample to play.
+//     */
+//    private void initializePlayer(Uri mediaUri) {
+//
+//        Log.i(Constants.LOG_TAG, "initialize player called()");
+//
+//        if (mExoPlayer == null) {
+//            Log.i(Constants.LOG_TAG, "mExoPlayer == null");
+//            // Create an instance of the ExoPlayer.
+//            TrackSelector trackSelector = new DefaultTrackSelector();
+//            LoadControl loadControl = new DefaultLoadControl();
+//            mExoPlayer = ExoPlayerFactory.newSimpleInstance(getContext(), trackSelector, loadControl);
+//            mPlayerView.setPlayer(mExoPlayer);
+//
+//            // Prepare the MediaSource.
+//            String userAgent = Util.getUserAgent(getContext(), "BakingMagicApp");
+//            MediaSource mediaSource = new ExtractorMediaSource(mediaUri, new DefaultDataSourceFactory(
+//                    getContext(), userAgent), new DefaultExtractorsFactory(), null, null);
+//            mExoPlayer.prepare(mediaSource);
+//            mExoPlayer.setPlayWhenReady(true);
+//        }
+//    }
 
     /**
      * Release ExoPlayer.
      */
-    private void releasePlayer() {
-        Log.i(Constants.LOG_TAG, "releasePlayer called()");
-        if(mExoPlayer != null){
-            mExoPlayer.stop();
-            mExoPlayer.release();
-            mExoPlayer = null;
-        }
-
-    }
-
+//    private void releasePlayer() {
+//        Log.i(Constants.LOG_TAG, "releasePlayer called()");
+//        if (mExoPlayer != null) {
+//            mExoPlayer.stop();
+//            mExoPlayer.release();
+//            mExoPlayer = null;
+//        }
+//
+//    }
     public void setVisibilityPreviousStep(int visible) {
         mPreviousStep.setVisibility(visible);
     }

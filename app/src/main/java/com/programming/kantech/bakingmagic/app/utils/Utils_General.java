@@ -3,6 +3,8 @@ package com.programming.kantech.bakingmagic.app.utils;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.support.design.widget.Snackbar;
+import android.view.View;
 import android.widget.Toast;
 
 import java.text.DecimalFormat;
@@ -27,6 +29,14 @@ public class Utils_General {
 
 
         return formatted_string;
+    }
+
+    public static void showSnackBar(View v, String message){
+
+        Snackbar snackbar = Snackbar
+                .make(v, message, Snackbar.LENGTH_LONG);
+
+        snackbar.show();
     }
 
     /**

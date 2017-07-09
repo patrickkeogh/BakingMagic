@@ -13,4 +13,6 @@
     <color name="colorReviewsBG">#f1f5f8</color>
 
     <color name="colorTransparent">#00000000</color>
+
+    <color name="black_overlay">#66000000</color>
 </resources>

@@ -77,7 +77,7 @@ public class Adapter_Recipe extends RecyclerView.Adapter<Adapter_Recipe.ViewHold
 
         @Override
         public void onClick(View view) {
-            Utils_General.showToast(view.getContext(), "Recipe clicked");
+            //Utils_General.showToast(view.getContext(), "Recipe clicked");
             mClickHandler.onClick(getItem(getAdapterPosition()));
         }
     }
