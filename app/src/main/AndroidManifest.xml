@@ -55,6 +55,7 @@
 
         <activity
             android:name=".views.activities.Activity_FullScreenVideo"
+            android:screenOrientation="landscape"
             android:configChanges="orientation|keyboardHidden|screenSize">
 
 

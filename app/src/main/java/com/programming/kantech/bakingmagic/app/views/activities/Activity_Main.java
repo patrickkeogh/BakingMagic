@@ -16,6 +16,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.TextView;
 
 import com.programming.kantech.bakingmagic.app.R;
 import com.programming.kantech.bakingmagic.app.data.model.pojo.Recipe;
@@ -60,6 +61,9 @@ public class Activity_Main extends AppCompatActivity implements LoaderManager.Lo
 
     private Context mContext;
 
+    @InjectView(R.id.empty_view)
+    TextView mEmptyView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -98,19 +102,27 @@ public class Activity_Main extends AppCompatActivity implements LoaderManager.Lo
             }
         });
 
+        ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
+
+        Call<List<Recipe>> call = apiService.getRecipes();
+
+        WeakReference<Context> mContext = new WeakReference<Context>(this);
+
+        new Task_GetRecipes(mContext).execute(call);
+
+
         if(!Utils_General.isNetworkAvailable(this)){
 
             Utils_General.showToast(this, getString(R.string.error_no_internet));
 
+            mList.setVisibility(View.GONE);
+            mEmptyView.setVisibility(View.VISIBLE);
+
         }else{
+            Utils_General.showToast(this, "Internet is good");
 
-            ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
-
-            Call<List<Recipe>> call = apiService.getRecipes();
-
-            WeakReference<Context> mContext = new WeakReference<Context>(this);
-
-            new Task_GetRecipes(mContext).execute(call);
+            mList.setVisibility(View.VISIBLE);
+            mEmptyView.setVisibility(View.GONE);
         }
 
 

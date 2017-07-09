@@ -50,14 +50,16 @@ public class Task_GetRecipes extends AsyncTask<Call, Void, List<Recipe>> {
         List<Ingredient> ingredients;
         List<Step> steps;
 
+        ContentResolver resolver = mContext.get().getContentResolver();
+
+        // Delete all ingredients, steps, and recipes, and then restore them
+        resolver.delete(Contract_BakingMagic.IngredientEntry.CONTENT_URI, null, null);
+        resolver.delete(Contract_BakingMagic.StepsEntry.CONTENT_URI, null, null);
+        resolver.delete(Contract_BakingMagic.RecipeEntry.CONTENT_URI, null, null);
+
         if (recipes != null) {
 
-            ContentResolver resolver = mContext.get().getContentResolver();
 
-            // Delete all ingredients, steps, and recipes, and then restore them
-            resolver.delete(Contract_BakingMagic.IngredientEntry.CONTENT_URI, null, null);
-            resolver.delete(Contract_BakingMagic.StepsEntry.CONTENT_URI, null, null);
-            resolver.delete(Contract_BakingMagic.RecipeEntry.CONTENT_URI, null, null);
 
             //loop over the recipes and add them to the db
             for (int i = 0; i < recipes.size(); i++) {
@@ -88,9 +90,6 @@ public class Task_GetRecipes extends AsyncTask<Call, Void, List<Recipe>> {
                     resolver.insert(Contract_BakingMagic.StepsEntry.CONTENT_URI,
                             Utils_ContentValues.extractStepValues(recipe_id, steps.get(x)));
                 }
-
-
-
             }
 
         }

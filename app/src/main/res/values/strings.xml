@@ -23,4 +23,5 @@
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
     <string name="error_no_internet">Could not retrieve recipes - no internet.</string>
+    <string name="no_data_available">Recipes could not be downloaded - no internet.</string>
 </resources>

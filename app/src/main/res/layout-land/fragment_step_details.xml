@@ -22,7 +22,7 @@
         <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:orientation="vertical"
             android:layout_width="fill_parent"
-            android:layout_height="336dp">
+            android:layout_height="373dp">
 
             <com.google.android.exoplayer2.ui.SimpleExoPlayerView
                 android:id="@+id/playerView"
