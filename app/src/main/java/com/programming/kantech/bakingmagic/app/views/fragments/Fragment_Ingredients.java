@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
 import com.programming.kantech.bakingmagic.app.R;
+import com.programming.kantech.bakingmagic.app.data.model.pojo.Step;
 import com.programming.kantech.bakingmagic.app.provider.Contract_BakingMagic;
 import com.programming.kantech.bakingmagic.app.utils.Constants;
 import com.programming.kantech.bakingmagic.app.views.ui.Adapter_Details_Ingredients;
@@ -43,6 +44,19 @@ public class Fragment_Ingredients extends Fragment implements  LoaderManager.Loa
      * Mandatory empty constructor for the fragment manager to instantiate the fragment
      */
     public Fragment_Ingredients() {
+    }
+
+    /**
+     * Static factory method that takes a Step parameter,
+     * initializes the fragment's arguments, and returns the
+     * new fragment to the client.
+     */
+    public static Fragment_Ingredients newInstance(int id) {
+        Fragment_Ingredients f = new Fragment_Ingredients();
+        Bundle args = new Bundle();
+        args.putInt(Constants.EXTRA_RECIPE_ID, id);
+        f.setArguments(args);
+        return f;
     }
 
     /**

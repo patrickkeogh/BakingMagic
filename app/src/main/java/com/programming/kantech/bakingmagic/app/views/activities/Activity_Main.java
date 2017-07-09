@@ -16,6 +16,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.programming.kantech.bakingmagic.app.R;
@@ -27,6 +28,7 @@ import com.programming.kantech.bakingmagic.app.tasks.Task_GetRecipes;
 import com.programming.kantech.bakingmagic.app.utils.Constants;
 import com.programming.kantech.bakingmagic.app.utils.Utils_General;
 import com.programming.kantech.bakingmagic.app.views.ui.Adapter_Recipe;
+import com.squareup.picasso.Picasso;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -64,6 +66,9 @@ public class Activity_Main extends AppCompatActivity implements LoaderManager.Lo
     @InjectView(R.id.empty_view)
     TextView mEmptyView;
 
+    @InjectView(R.id.iv_collapsing_image)
+    ImageView mCollapsingImage;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,6 +87,12 @@ public class Activity_Main extends AppCompatActivity implements LoaderManager.Lo
         // Define the collapsing toolbar title text color
         mCToolbarLayout.setCollapsedTitleTextColor(ContextCompat.getColor(this, R.color.colorWhite));
         mCToolbarLayout.setExpandedTitleColor(ContextCompat.getColor(this, R.color.colorWhite));
+
+        Picasso.with(this)
+                .load(R.drawable.image)
+                .placeholder(R.drawable.image)
+                .error(R.drawable.image)
+                .into(mCollapsingImage);
 
         //Set a listener to know the current visible state of CollapseLayout
         mAppbarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
@@ -119,7 +130,7 @@ public class Activity_Main extends AppCompatActivity implements LoaderManager.Lo
             mEmptyView.setVisibility(View.VISIBLE);
 
         }else{
-            Utils_General.showToast(this, "Internet is good");
+            //Utils_General.showToast(this, "Internet is good");
 
             mList.setVisibility(View.VISIBLE);
             mEmptyView.setVisibility(View.GONE);

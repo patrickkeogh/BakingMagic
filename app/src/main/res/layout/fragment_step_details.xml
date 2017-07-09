@@ -13,10 +13,28 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:textColor="@color/colorPrimaryDark" />
 
-    <com.google.android.exoplayer2.ui.SimpleExoPlayerView
-        android:id="@+id/playerView"
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/layout_for_videos"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <com.google.android.exoplayer2.ui.SimpleExoPlayerView
+            android:id="@+id/playerView"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/exo_player_height" />
+
+    </RelativeLayout>
+
+
+
+    <ImageView
+        android:id="@+id/iv_imageView"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/exo_player_height" />
+        android:layout_height="@dimen/exo_player_height"
+        android:adjustViewBounds="true"
+        android:contentDescription="@string/step_image"
+        android:scaleType="fitXY" />
 
     <LinearLayout
         android:id="@+id/layout_for_step_navigation"

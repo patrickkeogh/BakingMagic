@@ -2,14 +2,12 @@ package com.programming.kantech.bakingmagic.app.views.activities;
 
 import android.app.Activity;
 import android.content.AsyncQueryHandler;
-import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -30,8 +28,6 @@ import com.programming.kantech.bakingmagic.app.views.fragments.Fragment_Ingredie
 import com.programming.kantech.bakingmagic.app.views.fragments.Fragment_Step;
 
 import java.lang.ref.WeakReference;
-import java.util.Iterator;
-import java.util.Set;
 
 public class Activity_Details extends AppCompatActivity implements Fragment_Step.StepNavClickListener,
         Fragment_DetailsList.StepClickListener {
@@ -50,6 +46,8 @@ public class Activity_Details extends AppCompatActivity implements Fragment_Step
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.i(Constants.LOG_TAG, "onCreate called in Activity_Details");
+
         setContentView(R.layout.activity_details);
 
         mFragmentManager = getSupportFragmentManager();
@@ -202,46 +200,14 @@ public class Activity_Details extends AppCompatActivity implements Fragment_Step
         return super.onOptionsItemSelected(item); // let app handle it
     }
 
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//
-//        int id = item.getItemId();
-//
-//        // When the home button is pressed, determine what to do
-//        if (id == android.R.id.home) {
-//            if(mTwoCols){
-//                NavUtils.navigateUpFromSameTask(this);
-//            }else{
-//
-//                // Find out what fragment is showing in the master container
-//                mFragment = new Fragment();
-//                mFragment = mFragmentManager.findFragmentById(R.id.container_master);
-//
-//                // If details list is not showing, we are showing a child fregment
-//                if(!(mFragment instanceof Fragment_DetailsList)){
-//                    replaceMasterListFragment();
-//                }else{
-//                    NavUtils.navigateUpFromSameTask(this);
-//                }
-//
-//            }
-//
-//        }
-//        return super.onOptionsItemSelected(item);
-//    }
-
     private void addIngredientsFragment() {
         Log.i(Constants.LOG_TAG, "addIngredientsFragment called()");
 
-        Fragment_Ingredients frag_ingredients = new Fragment_Ingredients();
-
-        Bundle bundle = new Bundle();
-        bundle.putInt(Constants.EXTRA_RECIPE_ID, mRecipe.getId());
-        frag_ingredients.setArguments(bundle);
+        Fragment_Ingredients frag = Fragment_Ingredients.newInstance(mRecipe.getId());
 
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 
-        transaction.add(R.id.container_details, frag_ingredients, Constants.TAG_FRAGMENT_INGREDIENTS);
+        transaction.add(R.id.container_details, frag, Constants.TAG_FRAGMENT_INGREDIENTS);
         transaction.addToBackStack(null);
 
         // Commit the transaction
@@ -253,15 +219,11 @@ public class Activity_Details extends AppCompatActivity implements Fragment_Step
 
         Log.i(Constants.LOG_TAG, "AddMasterListFragment called()");
 
-        Fragment_DetailsList frag_details_list = new Fragment_DetailsList();
-
-        Bundle bundle = new Bundle();
-        bundle.putInt(Constants.EXTRA_RECIPE_ID, mRecipe.getId());
-        frag_details_list.setArguments(bundle);
+        Fragment_DetailsList frag = Fragment_DetailsList.newInstance(mRecipe.getId());
 
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 
-        transaction.add(R.id.container_master, frag_details_list, Constants.TAG_FRAGMENT_MASTER);
+        transaction.add(R.id.container_master, frag, Constants.TAG_FRAGMENT_MASTER);
         //transaction.addToBackStack(null);
 
         // Commit the transaction
@@ -273,16 +235,12 @@ public class Activity_Details extends AppCompatActivity implements Fragment_Step
 
         Log.i(Constants.LOG_TAG, "ReplaceMasterListFragment called()");
 
-        Fragment_DetailsList frag_details_list = new Fragment_DetailsList();
-
-        Bundle bundle = new Bundle();
-        bundle.putInt(Constants.EXTRA_RECIPE_ID, mRecipe.getId());
-        frag_details_list.setArguments(bundle);
+        Fragment_DetailsList frag = Fragment_DetailsList.newInstance(mRecipe.getId());
 
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 
-        transaction.replace(R.id.container_master, frag_details_list, Constants.TAG_FRAGMENT_MASTER);
-        transaction.addToBackStack(null);
+        transaction.replace(R.id.container_master, frag, Constants.TAG_FRAGMENT_MASTER);
+        //transaction.addToBackStack(null);
 
         // Commit the transaction
         transaction.commit();
@@ -293,13 +251,15 @@ public class Activity_Details extends AppCompatActivity implements Fragment_Step
 
         Log.i(Constants.LOG_TAG, "replaceDetailsFragmentWithStepFrag called()");
 
-        // Put this information in a Bundle and attach it to an Intent that will launch an Ingredients Activity
-        Bundle bundle = new Bundle();
-        bundle.putParcelable(Constants.EXTRA_STEP, mStep);
-        bundle.putString(Constants.EXTRA_RECIPE_NAME, mRecipe.getName());
+        Fragment_Step frag = Fragment_Step.newInstance(mStep);
 
-        Fragment_Step frag = new Fragment_Step();
-        frag.setArguments(bundle);
+        // Put this information in a Bundle and attach it to an Intent that will launch an Ingredients Activity
+        //Bundle bundle = new Bundle();
+        //bundle.putParcelable(Constants.EXTRA_STEP, mStep);
+        //bundle.putString(Constants.EXTRA_RECIPE_NAME, mRecipe.getName());
+
+        //Fragment_Step frag = new Fragment_Step();
+        //frag.setArguments(bundle);
 
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 
@@ -309,7 +269,7 @@ public class Activity_Details extends AppCompatActivity implements Fragment_Step
             // Replace whatever is in the fragment_container view with this fragment,
             // and add the transaction to the back stack so the user can navigate back
             transaction.replace(R.id.container_master, frag, Constants.TAG_FRAGMENT_STEP);
-            transaction.addToBackStack(null);
+            //transaction.addToBackStack(null);
         }
 
         // Commit the transaction
@@ -321,26 +281,19 @@ public class Activity_Details extends AppCompatActivity implements Fragment_Step
 
         Log.i(Constants.LOG_TAG, "replaceDetailsFragmentWithIngredientsFrag called()");
 
-        // Put this information in a Bundle and attach it to an Intent that will launch an Ingredients Activity
-        Bundle bundle = new Bundle();
-        bundle.putInt(Constants.EXTRA_RECIPE_ID, mRecipe.getId());
-        bundle.putString(Constants.EXTRA_RECIPE_NAME, mRecipe.getName());
-
-        Fragment_Ingredients frag_ingredients = new Fragment_Ingredients();
-        frag_ingredients.setArguments(bundle);
-        //frag_ingredients..setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+        Fragment_Ingredients frag = Fragment_Ingredients.newInstance(mRecipe.getId());
 
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 
         Log.i(Constants.LOG_TAG, "Activity details replaceDetailsFragmentWithIngredientsFrag TWOCols:" + mTwoCols);
         if (mTwoCols) {
 
-            transaction.replace(R.id.container_details, frag_ingredients, Constants.TAG_FRAGMENT_INGREDIENTS);
+            transaction.replace(R.id.container_details, frag, Constants.TAG_FRAGMENT_INGREDIENTS);
         } else {
             // Replace whatever is in the fragment_container view with this fragment,
             // and add the transaction to the back stack so the user can navigate back
-            transaction.replace(R.id.container_master, frag_ingredients, Constants.TAG_FRAGMENT_INGREDIENTS);
-            transaction.addToBackStack(null);
+            transaction.replace(R.id.container_master, frag, Constants.TAG_FRAGMENT_INGREDIENTS);
+            //transaction.addToBackStack(null);
         }
 
         // Commit the transaction
@@ -366,6 +319,9 @@ public class Activity_Details extends AppCompatActivity implements Fragment_Step
             //Log.i(Constants.LOG_TAG, "fragemnt tag:" + fragmentTag);
             outState.putString(Constants.STATE_INFO_DETAILS_FRAGMENT, fragmentTag);
         }
+
+        //Save the fragment's instance
+        //getSupportFragmentManager().putFragment(outState, "myFragmentName", mContent);
     }
 
     @Override

@@ -57,6 +57,19 @@ public class Fragment_DetailsList extends Fragment implements LoaderManager.Load
 
     }
 
+    /**
+     * Static factory method that takes a int parameter,
+     * initializes the fragment's arguments, and returns the
+     * new fragment to the client.
+     */
+    public static Fragment_DetailsList newInstance(int id) {
+        Fragment_DetailsList f = new Fragment_DetailsList();
+        Bundle args = new Bundle();
+        args.putInt(Constants.EXTRA_RECIPE_ID, id);
+        f.setArguments(args);
+        return f;
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
@@ -77,7 +90,7 @@ public class Fragment_DetailsList extends Fragment implements LoaderManager.Load
             @Override
             public void onClick(View view) {
 
-                Utils_General.showToast(getActivity(), "We clicked the ingredients text");
+                //Utils_General.showToast(getActivity(), "We clicked the ingredients text");
 
                 mCallback.replaceDetailsFragmentWithIngredientsFrag();
 

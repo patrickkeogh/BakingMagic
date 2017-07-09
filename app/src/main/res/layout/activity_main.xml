@@ -22,10 +22,9 @@
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
             <ImageView
-                android:id="@+id/iv_reviews_poster"
+                android:id="@+id/iv_collapsing_image"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:src="@drawable/image"
                 android:contentDescription="@string/main_screen_image"
                 android:scaleType="centerCrop"
                 app:layout_collapseMode="parallax" />
