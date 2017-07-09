@@ -170,7 +170,7 @@ public class Activity_Details extends AppCompatActivity implements Fragment_Step
             menu_fav.setIcon(R.drawable.ic_favorite_border_accent_24dp);
         }
 
-        return true; //true means been handled
+        return true; //true means been handled ...
 
     }
 
