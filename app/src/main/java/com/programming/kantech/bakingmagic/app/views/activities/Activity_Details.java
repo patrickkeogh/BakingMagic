@@ -126,6 +126,7 @@ public class Activity_Details extends AppCompatActivity implements Fragment_Step
 
             if (actionBar != null) {
                 actionBar.setDisplayHomeAsUpEnabled(false);
+
             }
 
             if (mFragment instanceof Fragment_Ingredients) {
