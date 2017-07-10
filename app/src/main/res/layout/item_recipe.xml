@@ -19,8 +19,8 @@
             android:src="@drawable/cake"
             android:paddingBottom="@dimen/padding_8dp"
             android:paddingTop="@dimen/padding_8dp"
-            android:layout_width="60dp"
-            android:layout_height="60dp" />
+            android:layout_width="@dimen/default_image_size"
+            android:layout_height="@dimen/default_image_size" />
 
         <TextView
             android:id="@+id/tv_recipe_name"
