@@ -5,14 +5,18 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.programming.kantech.bakingmagic.app.R;
 import com.programming.kantech.bakingmagic.app.data.model.pojo.Recipe;
 import com.programming.kantech.bakingmagic.app.utils.Utils_General;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static android.text.TextUtils.isEmpty;
 
 /**
  * Created by patrick keogh on 2017-06-24.
@@ -48,7 +52,28 @@ public class Adapter_Recipe extends RecyclerView.Adapter<Adapter_Recipe.ViewHold
 
     @Override
     public void onBindViewHolder(ViewHolder_Recipes holder, int position) {
-        holder.tv_name.setText(mRecipes.get(position).getName());
+
+        Recipe recipe = mRecipes.get(position);
+
+        holder.tv_name.setText(recipe.getName());
+
+        if(isEmpty(recipe.getImage())){
+            //holder.iv_image.setVisibility(View.GONE);
+
+            Picasso.with(mContext)
+                    .load(R.drawable.cake)
+                    .resize(80, 80)
+                    .placeholder(R.drawable.image)
+                    .error(R.drawable.image)
+                    .into(holder.iv_image);
+        }else{
+            Picasso.with(mContext)
+                    .load(recipe.getImage())
+                    .resize(40, 40)
+                    .placeholder(R.drawable.image)
+                    .error(R.drawable.image)
+                    .into(holder.iv_image);
+        }
     }
 
     @Override
@@ -68,11 +93,13 @@ public class Adapter_Recipe extends RecyclerView.Adapter<Adapter_Recipe.ViewHold
     class ViewHolder_Recipes extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         TextView tv_name;
+        ImageView iv_image;
 
         ViewHolder_Recipes(View itemView) {
             super(itemView);
             itemView.setOnClickListener(this);
             tv_name = (TextView)itemView.findViewById(R.id.tv_recipe_name);
+            iv_image = (ImageView)itemView.findViewById(R.id.iv_recipe_image);
         }
 
         @Override

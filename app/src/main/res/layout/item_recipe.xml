@@ -2,27 +2,39 @@
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/card_view"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     card_view:cardUseCompatPadding="true"
     card_view:cardCornerRadius="0dp"
     android:layout_marginBottom="@dimen/padding_8dp">
 
-    <RelativeLayout
+    <LinearLayout
+        android:orientation="horizontal"
+        android:background="@color/colorPrimary"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/iv_recipe_image"
+            android:src="@drawable/cake"
+            android:paddingBottom="@dimen/padding_8dp"
+            android:paddingTop="@dimen/padding_8dp"
+            android:layout_width="60dp"
+            android:layout_height="60dp" />
 
         <TextView
             android:id="@+id/tv_recipe_name"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="60dp"
             android:textColor="@color/colorAccent"
+            android:text="Brownies"
             android:gravity="center"
             android:paddingBottom="@dimen/padding_8dp"
             android:paddingTop="@dimen/padding_8dp"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            android:background="@color/colorPrimaryDark"/>
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"/>
 
-    </RelativeLayout>
+
+
+    </LinearLayout>
 
 </android.support.v7.widget.CardView>

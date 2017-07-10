@@ -90,6 +90,7 @@ public class Activity_Main extends AppCompatActivity implements LoaderManager.Lo
 
         Picasso.with(this)
                 .load(R.drawable.image)
+                .resize(618,360)
                 .placeholder(R.drawable.image)
                 .error(R.drawable.image)
                 .into(mCollapsingImage);

@@ -32,7 +32,7 @@ import static org.hamcrest.Matchers.allOf;
  */
 
 @RunWith(AndroidJUnit4.class)
-public class MainActivityScreenTest {
+public class MainActivityScreen_Test {
 
     public static final String RECIPE_NAME = "Brownies";
 
